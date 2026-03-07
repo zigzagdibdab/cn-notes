@@ -1,2802 +1,1973 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Computer Networks — Study Guide</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg: #0a0e1a;
-        --surface: #111827;
-        --surface2: #1a2235;
-        --border: #1e2d45;
-        --accent: #00d4ff;
-        --accent2: #ff6b35;
-        --accent3: #7cfc6e;
-        --text: #e2e8f0;
-        --muted: #64748b;
-        --heading: #f8fafc;
-        --mono: "IBM Plex Mono", monospace;
-        --sans: "IBM Plex Sans", sans-serif;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: var(--sans);
-        font-size: 15px;
-        line-height: 1.7;
-      }
-
-      /* ── HEADER ── */
-      header {
-        background: linear-gradient(
-          135deg,
-          #0a0e1a 0%,
-          #0d1b2e 50%,
-          #0a1520 100%
-        );
-        border-bottom: 1px solid var(--border);
-        padding: 40px 0 30px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-      header::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background:
-          repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 30px,
-            rgba(0, 212, 255, 0.03) 30px,
-            rgba(0, 212, 255, 0.03) 31px
-          ),
-          repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 50px,
-            rgba(0, 212, 255, 0.02) 50px,
-            rgba(0, 212, 255, 0.02) 51px
-          );
-      }
-      header h1 {
-        font-family: var(--mono);
-        font-size: 2rem;
-        font-weight: 600;
-        color: var(--accent);
-        letter-spacing: -0.5px;
-        position: relative;
-      }
-      header h1 span {
-        color: var(--accent2);
-      }
-      header p {
-        font-family: var(--mono);
-        font-size: 0.78rem;
-        color: var(--muted);
-        margin-top: 8px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        position: relative;
-      }
-
-      /* ── LAYOUT ── */
-      .container {
-        display: flex;
-        min-height: calc(100vh - 130px);
-      }
-
-      /* ── SIDEBAR ── */
-      nav {
-        width: 260px;
-        min-width: 260px;
-        background: var(--surface);
-        border-right: 1px solid var(--border);
-        padding: 20px 0;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-      }
-      nav::-webkit-scrollbar {
-        width: 4px;
-      }
-      nav::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      nav::-webkit-scrollbar-thumb {
-        background: var(--border);
-        border-radius: 2px;
-      }
-
-      .nav-section {
-        padding: 6px 16px;
-        font-family: var(--mono);
-        font-size: 0.65rem;
-        color: var(--accent);
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-top: 14px;
-      }
-      nav a {
-        display: block;
-        padding: 7px 16px 7px 24px;
-        color: var(--muted);
-        text-decoration: none;
-        font-size: 0.82rem;
-        transition: all 0.15s;
-        border-left: 2px solid transparent;
-        font-family: var(--sans);
-      }
-      nav a:hover,
-      nav a.active {
-        color: var(--text);
-        background: var(--surface2);
-        border-left-color: var(--accent);
-      }
-      nav a.active {
-        color: var(--accent);
-      }
-
-      /* ── MAIN CONTENT ── */
-      main {
-        flex: 1;
-        padding: 40px 48px;
-        max-width: 100%;
-      }
-
-      .section {
-        display: none;
-        animation: fadeIn 0.3s ease;
-      }
-      .section.active {
-        display: block;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .section-title {
-        font-family: var(--mono);
-        font-size: 1.4rem;
-        color: var(--heading);
-        margin-bottom: 6px;
-        font-weight: 600;
-      }
-      .section-subtitle {
-        font-size: 0.82rem;
-        color: var(--accent);
-        font-family: var(--mono);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 28px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border);
-      }
-
-      h3 {
-        font-size: 1.05rem;
-        color: var(--accent2);
-        margin: 28px 0 10px;
-        font-family: var(--mono);
-        font-weight: 600;
-      }
-      h4 {
-        font-size: 0.9rem;
-        color: var(--accent3);
-        margin: 18px 0 8px;
-        font-weight: 600;
-      }
-      p {
-        margin-bottom: 12px;
-        color: var(--text);
-      }
-
-      /* ── CARDS ── */
-      .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
-        gap: 14px;
-        margin: 18px 0 24px;
-      }
-      .card {
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 16px;
-        transition:
-          border-color 0.2s,
-          transform 0.2s;
-      }
-      .card:hover {
-        border-color: var(--accent);
-        transform: translateY(-2px);
-      }
-      .card .card-title {
-        font-family: var(--mono);
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--accent);
-        margin-bottom: 8px;
-      }
-      .card p {
-        font-size: 0.82rem;
-        color: var(--muted);
-        margin: 0;
-      }
-      .card .tag {
-        display: inline-block;
-        margin-top: 8px;
-        padding: 2px 8px;
-        background: rgba(0, 212, 255, 0.1);
-        border: 1px solid rgba(0, 212, 255, 0.2);
-        border-radius: 3px;
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        color: var(--accent);
-      }
-
-      /* ── TABLE ── */
-      .tbl-wrap {
-        overflow-x: auto;
-        margin: 18px 0 24px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.83rem;
-      }
-      thead th {
-        background: var(--surface2);
-        color: var(--accent);
-        font-family: var(--mono);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        padding: 10px 14px;
-        text-align: left;
-        border-bottom: 1px solid var(--border);
-      }
-      tbody td {
-        padding: 9px 14px;
-        border-bottom: 1px solid rgba(30, 45, 69, 0.5);
-        color: var(--text);
-        vertical-align: top;
-      }
-      tbody tr:hover td {
-        background: rgba(26, 34, 53, 0.5);
-      }
-      td:first-child {
-        color: var(--accent3);
-        font-family: var(--mono);
-        font-weight: 600;
-        font-size: 0.82rem;
-      }
-
-      /* ── CODE BOX ── */
-      .code-box {
-        background: #050810;
-        border: 1px solid var(--border);
-        border-left: 3px solid var(--accent);
-        border-radius: 4px;
-        padding: 16px 18px;
-        font-family: var(--mono);
-        font-size: 0.8rem;
-        color: #a8d8ea;
-        margin: 16px 0 24px;
-        white-space: pre;
-        overflow-x: auto;
-        line-height: 1.6;
-      }
-      .code-box .c {
-        color: var(--muted);
-      }
-      .code-box .k {
-        color: var(--accent);
-      }
-      .code-box .s {
-        color: var(--accent3);
-      }
-      .code-box .n {
-        color: var(--accent2);
-      }
-
-      /* ── CALLOUT ── */
-      .callout {
-        border-radius: 6px;
-        padding: 14px 18px;
-        margin: 18px 0;
-        font-size: 0.85rem;
-        border-left: 3px solid;
-      }
-      .callout.info {
-        background: rgba(0, 212, 255, 0.06);
-        border-color: var(--accent);
-      }
-      .callout.warn {
-        background: rgba(255, 107, 53, 0.06);
-        border-color: var(--accent2);
-      }
-      .callout.tip {
-        background: rgba(124, 252, 110, 0.06);
-        border-color: var(--accent3);
-      }
-      .callout strong {
-        font-family: var(--mono);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: block;
-        margin-bottom: 4px;
-      }
-      .callout.info strong {
-        color: var(--accent);
-      }
-      .callout.warn strong {
-        color: var(--accent2);
-      }
-      .callout.tip strong {
-        color: var(--accent3);
-      }
-
-      /* ── TOPOLOGY DIAGRAM ── */
-      .diagram {
-        margin: 20px 0;
-        text-align: center;
-      }
-      .diagram svg {
-        max-width: 100%;
-      }
-
-      /* ── QUIZ ── */
-      .quiz-wrap {
-        margin-top: 32px;
-        border-top: 1px solid var(--border);
-        padding-top: 28px;
-      }
-      .quiz-q {
-        font-size: 0.9rem;
-        color: var(--heading);
-        margin-bottom: 12px;
-        font-weight: 600;
-      }
-      .quiz-opts {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 20px;
-      }
-      .quiz-opt {
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 5px;
-        padding: 9px 14px;
-        cursor: pointer;
-        font-size: 0.84rem;
-        transition: all 0.15s;
-      }
-      .quiz-opt:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-      .quiz-opt.correct {
-        background: rgba(124, 252, 110, 0.1);
-        border-color: var(--accent3);
-        color: var(--accent3);
-      }
-      .quiz-opt.wrong {
-        background: rgba(255, 107, 53, 0.1);
-        border-color: var(--accent2);
-        color: var(--accent2);
-      }
-      .quiz-feedback {
-        font-size: 0.82rem;
-        color: var(--muted);
-        margin-top: -10px;
-        margin-bottom: 16px;
-        display: none;
-      }
-
-      /* ── PROGRESS BAR ── */
-      .progress-bar-wrap {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-      }
-      .progress-bar {
-        flex: 1;
-        height: 4px;
-        background: var(--surface2);
-        border-radius: 2px;
-        overflow: hidden;
-      }
-      .progress-fill {
-        height: 100%;
-        background: var(--accent);
-        border-radius: 2px;
-        transition: width 0.3s;
-      }
-      .progress-label {
-        font-family: var(--mono);
-        font-size: 0.72rem;
-        color: var(--muted);
-        white-space: nowrap;
-      }
-
-      ul {
-        padding-left: 22px;
-        margin-bottom: 14px;
-      }
-      li {
-        margin-bottom: 5px;
-        font-size: 0.88rem;
-        color: var(--text);
-      }
-      li::marker {
-        color: var(--accent);
-      }
-      strong {
-        color: var(--heading);
-      }
-
-      .highlight {
-        color: var(--accent);
-        font-family: var(--mono);
-      }
-      .tag-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin: 12px 0;
-      }
-      .badge {
-        padding: 3px 10px;
-        border-radius: 3px;
-        font-family: var(--mono);
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-      }
-      .badge.blue {
-        background: rgba(0, 212, 255, 0.12);
-        color: var(--accent);
-        border: 1px solid rgba(0, 212, 255, 0.25);
-      }
-      .badge.orange {
-        background: rgba(255, 107, 53, 0.12);
-        color: var(--accent2);
-        border: 1px solid rgba(255, 107, 53, 0.25);
-      }
-      .badge.green {
-        background: rgba(124, 252, 110, 0.12);
-        color: var(--accent3);
-        border: 1px solid rgba(124, 252, 110, 0.25);
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>COMPUTER <span>NETWORKS</span></h1>
-      <p>Interactive Study Guide · Forouzan Curriculum</p>
-    </header>
-
-    <div class="container">
-      <nav id="sidebar">
-        <div class="nav-section">Unit 1 — Overview</div>
-        <a href="#" onclick="show('s1')" id="nav-s1" class="active"
-          >Network Types: LAN, MAN, WAN</a
-        >
-        <a href="#" onclick="show('s2')" id="nav-s2"
-          >Wired vs Wireless & Broadcast</a
-        >
-        <a href="#" onclick="show('s3')" id="nav-s3">Network Topologies</a>
-        <a href="#" onclick="show('s4')" id="nav-s4">OSI & TCP/IP Models</a>
-
-        <div class="nav-section">Unit 2 — Physical Layer</div>
-        <a href="#" onclick="show('s5')" id="nav-s5">Data & Signals</a>
-        <a href="#" onclick="show('s6')" id="nav-s6"
-          >Digital & Analog Transmission</a
-        >
-        <a href="#" onclick="show('s7')" id="nav-s7"
-          >Multiplexing (FDM, TDM, WDM)</a
-        >
-        <a href="#" onclick="show('s8')" id="nav-s8">Transmission Media</a>
-        <a href="#" onclick="show('s9')" id="nav-s9">Switching Techniques</a>
-
-        <div class="nav-section">Unit 3 — Data-Link Layer</div>
-        <a href="#" onclick="show('s10')" id="nav-s10">DLC & Framing</a>
-        <a href="#" onclick="show('s11')" id="nav-s11"
-          >Multiple Access Protocols</a
-        >
-        <a href="#" onclick="show('s12')" id="nav-s12">Wired LANs (Ethernet)</a>
-        <a href="#" onclick="show('s13')" id="nav-s13"
-          >Wireless: 802.11 & Bluetooth</a
-        >
-        <a href="#" onclick="show('s14')" id="nav-s14"
-          >WiMAX, Cellular & Satellite</a
-        >
-
-        <div class="nav-section">Unit 4 — Transport Layer</div>
-        <a href="#" onclick="show('s15')" id="nav-s15"
-          >Error Control Protocols</a
-        >
-        <a href="#" onclick="show('s16')" id="nav-s16"
-          >Go-Back-N & Selective Repeat</a
-        >
-        <a href="#" onclick="show('s17')" id="nav-s17">UDP & TCP</a>
-        <a href="#" onclick="show('s18')" id="nav-s18">Quick Quiz</a>
-      </nav>
-
-      <main>
-        <!-- ════════════════════════════════ S1: Network Types ════════════════════════════════ -->
-        <section class="section active" id="s1">
-          <div class="section-title">Network Types</div>
-          <div class="section-subtitle">Unit 1 · LAN · MAN · WAN</div>
-
-          <p>
-            Networks are classified by their
-            <strong>geographic coverage</strong>. Three fundamental categories
-            form the backbone of this classification:
-          </p>
-
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">LAN</div>
-              <p>
-                Local Area Network. Covers a room, building, or campus. Speeds:
-                100 Mbps – 10 Gbps.
-              </p>
-              <span class="tag">≤ 1 km</span>
-            </div>
-            <div class="card">
-              <div class="card-title">MAN</div>
-              <p>
-                Metropolitan Area Network. Spans a city or metro area. Used by
-                ISPs and cable operators.
-              </p>
-              <span class="tag">1 – 100 km</span>
-            </div>
-            <div class="card">
-              <div class="card-title">WAN</div>
-              <p>
-                Wide Area Network. Spans countries/continents. Uses leased
-                lines, satellites, undersea cables.
-              </p>
-              <span class="tag">&gt; 100 km</span>
-            </div>
-          </div>
-
-          <h3>Comparison Table</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>LAN</th>
-                  <th>MAN</th>
-                  <th>WAN</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Coverage</td>
-                  <td>Building/Campus</td>
-                  <td>City/Metro</td>
-                  <td>Country/World</td>
-                </tr>
-                <tr>
-                  <td>Ownership</td>
-                  <td>Private</td>
-                  <td>Private/Public</td>
-                  <td>Public/ISP</td>
-                </tr>
-                <tr>
-                  <td>Speed</td>
-                  <td>High (Gbps)</td>
-                  <td>Medium</td>
-                  <td>Lower (varies)</td>
-                </tr>
-                <tr>
-                  <td>Error Rate</td>
-                  <td>Very Low</td>
-                  <td>Low</td>
-                  <td>Higher</td>
-                </tr>
-                <tr>
-                  <td>Technologies</td>
-                  <td>Ethernet, Wi-Fi</td>
-                  <td>WiMAX, Cable</td>
-                  <td>SONET, MPLS, Satellite</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="callout info">
-            <strong>Key insight</strong>
-            The Internet is not a WAN itself — it is an
-            <em>internetwork</em> (network of networks), composed of thousands
-            of LANs, MANs, and WANs interconnected by routers.
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S2: Wired vs Wireless ════════════════════════════════ -->
-        <section class="section" id="s2">
-          <div class="section-title">Wired vs Wireless & Broadcast</div>
-          <div class="section-subtitle">Unit 1 · Transmission modes</div>
-
-          <h3>Wired Networks</h3>
-          <p>
-            Use physical media (copper wire, fiber optic, coaxial cable) to
-            carry signals. Offer
-            <strong>higher security, reliability, and speed</strong> but limited
-            mobility.
-          </p>
-
-          <h3>Wireless Networks</h3>
-          <p>
-            Use electromagnetic waves (radio, microwave, infrared). Provide
-            <strong>mobility and easy deployment</strong> but susceptible to
-            interference, eavesdropping, and shared-medium collisions.
-          </p>
-
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">Broadcast Network</div>
-              <p>
-                Single communication channel shared by all. Every device
-                receives every packet; address field determines the intended
-                recipient.
-              </p>
-              <span class="tag">e.g., Wi-Fi, Cable TV</span>
-            </div>
-            <div class="card">
-              <div class="card-title">Point-to-Point Network</div>
-              <p>
-                Dedicated link between exactly two endpoints. More secure, no
-                collision. Multiple hops may be needed to reach destination.
-              </p>
-              <span class="tag">e.g., WAN leased line</span>
-            </div>
-            <div class="card">
-              <div class="card-title">Unicast</div>
-              <p>One sender → one specific receiver.</p>
-            </div>
-            <div class="card">
-              <div class="card-title">Multicast</div>
-              <p>One sender → a group of receivers.</p>
-            </div>
-            <div class="card">
-              <div class="card-title">Broadcast</div>
-              <p>One sender → all devices on the network.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S3: Topologies ════════════════════════════════ -->
-        <section class="section" id="s3">
-          <div class="section-title">Network Topologies</div>
-          <div class="section-subtitle">
-            Unit 1 · Physical & Logical arrangement
-          </div>
-
-          <p>
-            <strong>Topology</strong> describes the geometric arrangement of
-            nodes and links. There is a difference between
-            <em>physical</em> topology (actual cable layout) and
-            <em>logical</em> topology (how data flows).
-          </p>
-
-          <div class="diagram">
-            <svg
-              viewBox="0 0 700 340"
-              xmlns="http://www.w3.org/2000/svg"
-              style="width: 100%; max-width: 700px"
-            >
-              <defs>
-                <marker
-                  id="arr"
-                  markerWidth="6"
-                  markerHeight="6"
-                  refX="3"
-                  refY="3"
-                  orient="auto"
-                >
-                  <path d="M0,0 L6,3 L0,6 Z" fill="#1e2d45" />
-                </marker>
-              </defs>
-              <!-- BUS -->
-              <text
-                x="60"
-                y="20"
-                fill="#00d4ff"
-                font-family="IBM Plex Mono"
-                font-size="11"
-                font-weight="600"
-              >
-                BUS
-              </text>
-              <line
-                x1="30"
-                y1="60"
-                x2="200"
-                y2="60"
-                stroke="#1e2d45"
-                stroke-width="3"
-              />
-              <circle
-                cx="60"
-                cy="60"
-                r="10"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="100"
-                cy="60"
-                r="10"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="140"
-                cy="60"
-                r="10"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="180"
-                cy="60"
-                r="10"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <line
-                x1="60"
-                y1="60"
-                x2="60"
-                y2="45"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <line
-                x1="100"
-                y1="60"
-                x2="100"
-                y2="45"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <line
-                x1="140"
-                y1="60"
-                x2="140"
-                y2="45"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <line
-                x1="180"
-                y1="60"
-                x2="180"
-                y2="45"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-
-              <!-- STAR -->
-              <text
-                x="270"
-                y="20"
-                fill="#00d4ff"
-                font-family="IBM Plex Mono"
-                font-size="11"
-                font-weight="600"
-              >
-                STAR
-              </text>
-              <circle
-                cx="330"
-                cy="80"
-                r="14"
-                fill="#1a2235"
-                stroke="#ff6b35"
-                stroke-width="2"
-              />
-              <text
-                x="330"
-                y="85"
-                text-anchor="middle"
-                fill="#ff6b35"
-                font-size="8"
-                font-family="IBM Plex Mono"
-              >
-                HUB
-              </text>
-              <circle
-                cx="280"
-                cy="40"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="380"
-                cy="40"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="280"
-                cy="120"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="380"
-                cy="120"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="330"
-                cy="30"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <line
-                x1="280"
-                y1="40"
-                x2="320"
-                y2="70"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="380"
-                y1="40"
-                x2="340"
-                y2="70"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="280"
-                y1="120"
-                x2="320"
-                y2="90"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="380"
-                y1="120"
-                x2="340"
-                y2="90"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="330"
-                y1="30"
-                x2="330"
-                y2="66"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-
-              <!-- RING -->
-              <text
-                x="450"
-                y="20"
-                fill="#00d4ff"
-                font-family="IBM Plex Mono"
-                font-size="11"
-                font-weight="600"
-              >
-                RING
-              </text>
-              <circle
-                cx="510"
-                cy="75"
-                r="50"
-                fill="none"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-                stroke-dasharray="5,3"
-              />
-              <circle
-                cx="510"
-                cy="25"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="556"
-                cy="55"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="556"
-                cy="97"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="510"
-                cy="125"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="464"
-                cy="97"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="464"
-                cy="55"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <path
-                d="M510,34 L548,62 L548,90 L510,116 L472,90 L472,62 Z"
-                fill="none"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-
-              <!-- MESH -->
-              <text
-                x="30"
-                y="185"
-                fill="#00d4ff"
-                font-family="IBM Plex Mono"
-                font-size="11"
-                font-weight="600"
-              >
-                MESH
-              </text>
-              <circle
-                cx="60"
-                cy="220"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="120"
-                cy="210"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="170"
-                cy="240"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="90"
-                cy="280"
-                r="9"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <line
-                x1="60"
-                y1="220"
-                x2="120"
-                y2="210"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="60"
-                y1="220"
-                x2="170"
-                y2="240"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="60"
-                y1="220"
-                x2="90"
-                y2="280"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="120"
-                y1="210"
-                x2="170"
-                y2="240"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="120"
-                y1="210"
-                x2="90"
-                y2="280"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="170"
-                y1="240"
-                x2="90"
-                y2="280"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-
-              <!-- TREE -->
-              <text
-                x="230"
-                y="185"
-                fill="#00d4ff"
-                font-family="IBM Plex Mono"
-                font-size="11"
-                font-weight="600"
-              >
-                TREE (Hierarchical)
-              </text>
-              <circle
-                cx="370"
-                cy="210"
-                r="9"
-                fill="#111827"
-                stroke="#ff6b35"
-                stroke-width="2"
-              />
-              <circle
-                cx="320"
-                cy="245"
-                r="8"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="420"
-                cy="245"
-                r="8"
-                fill="#111827"
-                stroke="#00d4ff"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="295"
-                cy="280"
-                r="7"
-                fill="#111827"
-                stroke="#7cfc6e"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="345"
-                cy="280"
-                r="7"
-                fill="#111827"
-                stroke="#7cfc6e"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="395"
-                cy="280"
-                r="7"
-                fill="#111827"
-                stroke="#7cfc6e"
-                stroke-width="1.5"
-              />
-              <circle
-                cx="445"
-                cy="280"
-                r="7"
-                fill="#111827"
-                stroke="#7cfc6e"
-                stroke-width="1.5"
-              />
-              <line
-                x1="370"
-                y1="219"
-                x2="320"
-                y2="237"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="370"
-                y1="219"
-                x2="420"
-                y2="237"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="320"
-                y1="253"
-                x2="295"
-                y2="273"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="320"
-                y1="253"
-                x2="345"
-                y2="273"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="420"
-                y1="253"
-                x2="395"
-                y2="273"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-              <line
-                x1="420"
-                y1="253"
-                x2="445"
-                y2="273"
-                stroke="#1e2d45"
-                stroke-width="1.5"
-              />
-            </svg>
-          </div>
-
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Topology</th>
-                  <th>Advantage</th>
-                  <th>Disadvantage</th>
-                  <th>Used in</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Bus</td>
-                  <td>Simple, cheap</td>
-                  <td>Single point of failure (backbone); collision</td>
-                  <td>Old Ethernet (10BASE2)</td>
-                </tr>
-                <tr>
-                  <td>Star</td>
-                  <td>Easy troubleshoot; fault isolation</td>
-                  <td>Hub/switch failure kills all</td>
-                  <td>Modern Ethernet LAN</td>
-                </tr>
-                <tr>
-                  <td>Ring</td>
-                  <td>Equal access (token)</td>
-                  <td>One failure breaks ring; slow</td>
-                  <td>Token Ring, SONET</td>
-                </tr>
-                <tr>
-                  <td>Mesh</td>
-                  <td>High redundancy, fault tolerant</td>
-                  <td>Expensive; complex cabling</td>
-                  <td>Internet backbone, WANs</td>
-                </tr>
-                <tr>
-                  <td>Tree</td>
-                  <td>Hierarchical; easy expansion</td>
-                  <td>Root failure cascades</td>
-                  <td>Cable TV, enterprise LANs</td>
-                </tr>
-                <tr>
-                  <td>Hybrid</td>
-                  <td>Flexible</td>
-                  <td>Complex design</td>
-                  <td>Most real networks</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S4: OSI & TCP/IP ════════════════════════════════ -->
-        <section class="section" id="s4">
-          <div class="section-title">OSI & TCP/IP Models</div>
-          <div class="section-subtitle">
-            Unit 1 · Protocol Suites & Layered Architecture
-          </div>
-
-          <p>
-            Protocol suites define a <strong>layered architecture</strong> where
-            each layer provides services to the layer above and uses services
-            from the layer below. This achieves <em>modularity</em> and
-            <em>interoperability</em>.
-          </p>
-
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>OSI Layer</th>
-                  <th>TCP/IP Layer</th>
-                  <th>Key Protocols</th>
-                  <th>PDU</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>7</td>
-                  <td>Application</td>
-                  <td
-                    rowspan="3"
-                    style="vertical-align: middle; color: #7cfc6e"
-                  >
-                    Application
-                  </td>
-                  <td>HTTP, FTP, SMTP, DNS, SNMP</td>
-                  <td>Message</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>Presentation</td>
-                  <td>SSL/TLS, MIME, JPEG encoding</td>
-                  <td>Message</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Session</td>
-                  <td>NetBIOS, RPC</td>
-                  <td>Message</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Transport</td>
-                  <td style="color: #7cfc6e">Transport</td>
-                  <td>TCP, UDP, SCTP</td>
-                  <td>Segment</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Network</td>
-                  <td style="color: #7cfc6e">Internet</td>
-                  <td>IP, ICMP, ARP, OSPF, BGP</td>
-                  <td>Packet/Datagram</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Data-Link</td>
-                  <td
-                    rowspan="2"
-                    style="vertical-align: middle; color: #7cfc6e"
-                  >
-                    Network Access
-                  </td>
-                  <td>Ethernet, Wi-Fi, PPP</td>
-                  <td>Frame</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Physical</td>
-                  <td>Cables, Hubs, Radio signals</td>
-                  <td>Bits</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="callout warn">
-            <strong>OSI vs TCP/IP</strong>
-            OSI is a <em>conceptual/reference model</em> (7 layers) developed by
-            ISO; TCP/IP is a <em>practical/implemented model</em> (4-5 layers)
-            that actually runs the Internet. In exams, know both but always map
-            them correctly.
-          </div>
-
-          <h3>Encapsulation</h3>
-          <div class="code-box">
-            <span class="c"
-              >[ Application ] → Message [ Transport ] → Segment = Message +
-              TCP/UDP header [ Internet ] → Packet = Segment + IP header [
-              Data-Link ] → Frame = Packet + DL header + Trailer [ Physical ] →
-              Bits transmitted over medium</span
-            >
-          </div>
-
-          <h3>History & Standards</h3>
-          <ul>
-            <li><strong>1969</strong> — ARPANET (precursor to the Internet)</li>
-            <li><strong>1974</strong> — TCP/IP proposed by Cerf & Kahn</li>
-            <li><strong>1983</strong> — TCP/IP becomes ARPANET standard</li>
-            <li><strong>1984</strong> — OSI model published by ISO</li>
-            <li>
-              <strong>1991</strong> — World Wide Web (HTTP) by Berners-Lee
-            </li>
-            <li>
-              Standards bodies: <span class="highlight">IEEE</span>,
-              <span class="highlight">IETF</span> (RFCs),
-              <span class="highlight">ISO</span>,
-              <span class="highlight">ITU-T</span>,
-              <span class="highlight">ANSI</span>
-            </li>
-          </ul>
-        </section>
-
-        <!-- ════════════════════════════════ S5: Data & Signals ════════════════════════════════ -->
-        <section class="section" id="s5">
-          <div class="section-title">Data &amp; Signals</div>
-          <div class="section-subtitle">Unit 2 · Physical Layer</div>
-
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">Analog Signal</div>
-              <p>
-                Continuous waveform. Described by amplitude, frequency, and
-                phase. Example: voice, AM/FM radio.
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-title">Digital Signal</div>
-              <p>
-                Discrete voltage levels (0s and 1s). Easier to regenerate. Used
-                in computers and modern networks.
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-title">Periodic Signal</div>
-              <p>Repeats in a fixed time period T. Frequency f = 1/T (Hz).</p>
-            </div>
-            <div class="card">
-              <div class="card-title">Aperiodic Signal</div>
-              <p>Does not repeat. Most data signals are aperiodic.</p>
-            </div>
-          </div>
-
-          <h3>Key Parameters</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Parameter</th>
-                  <th>Definition</th>
-                  <th>Unit</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Amplitude</td>
-                  <td>Peak value/strength of signal</td>
-                  <td>Volts</td>
-                </tr>
-                <tr>
-                  <td>Frequency</td>
-                  <td>Number of cycles per second</td>
-                  <td>Hz</td>
-                </tr>
-                <tr>
-                  <td>Period</td>
-                  <td>Time for one complete cycle (T = 1/f)</td>
-                  <td>Seconds</td>
-                </tr>
-                <tr>
-                  <td>Phase</td>
-                  <td>Position of waveform relative to reference</td>
-                  <td>Degrees</td>
-                </tr>
-                <tr>
-                  <td>Wavelength</td>
-                  <td>λ = v/f (distance one cycle travels)</td>
-                  <td>Meters</td>
-                </tr>
-                <tr>
-                  <td>Bandwidth</td>
-                  <td>Range of frequencies a channel can carry</td>
-                  <td>Hz</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Nyquist & Shannon Theorems</h3>
-          <div class="code-box">
-            <span class="c">// Nyquist Theorem (Noiseless channel)</span>
-            <span class="k">Max Data Rate</span> = 2 ×
-            <span class="s">Bandwidth</span> × log₂(<span class="n">L</span>)
-            <span class="c"> L = number of signal levels</span>
-
-            <span class="c">// Shannon's Capacity Theorem (Noisy channel)</span>
-            <span class="k">Capacity</span> = <span class="s">Bandwidth</span> ×
-            log₂(1 + <span class="n">SNR</span>)
-            <span class="c">
-              SNR = Signal-to-Noise Ratio (in dB: SNRdb = 10·log₁₀(SNR))</span
-            >
-          </div>
-
-          <div class="callout tip">
-            <strong>Exam tip</strong>
-            Shannon gives the theoretical maximum; Nyquist gives the maximum for
-            a specific encoding scheme. Real systems are always limited by the
-            Shannon bound.
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S6: Transmission ════════════════════════════════ -->
-        <section class="section" id="s6">
-          <div class="section-title">Digital &amp; Analog Transmission</div>
-          <div class="section-subtitle">Unit 2 · Encoding & Modulation</div>
-
-          <h3>Digital-to-Digital Encoding</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Scheme</th>
-                  <th>Description</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>NRZ-L</td>
-                  <td>Level: 0 = high, 1 = low (or vice versa)</td>
-                  <td>Simple but no sync for long runs</td>
-                </tr>
-                <tr>
-                  <td>NRZ-I</td>
-                  <td>Inversion: change on 1, no change on 0</td>
-                  <td>Better for consecutive 1s</td>
-                </tr>
-                <tr>
-                  <td>Manchester</td>
-                  <td>Transition in middle of bit: ↓=0, ↑=1</td>
-                  <td>Self-clocking; used in 10BASE-T</td>
-                </tr>
-                <tr>
-                  <td>Diff. Manchester</td>
-                  <td>Transition at start for 0; no change for 1</td>
-                  <td>Token Ring</td>
-                </tr>
-                <tr>
-                  <td>AMI / B8ZS</td>
-                  <td>Bipolar: +/- alternating for 1s</td>
-                  <td>Used in T1 lines</td>
-                </tr>
-                <tr>
-                  <td>4B/5B</td>
-                  <td>Maps 4 data bits → 5 code bits</td>
-                  <td>Ensures enough transitions; used with NRZ-I</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Analog-to-Analog Modulation (Carriers)</h3>
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">AM — Amplitude Modulation</div>
-              <p>
-                Signal info encoded in amplitude of carrier wave. Susceptible to
-                noise.
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-title">FM — Frequency Modulation</div>
-              <p>
-                Info encoded in frequency shifts. Less noise. Used in FM radio.
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-title">PM — Phase Modulation</div>
-              <p>Info encoded in phase shifts of carrier.</p>
-            </div>
-          </div>
-
-          <h3>Digital-to-Analog Modulation</h3>
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">ASK</div>
-              <p>
-                Amplitude Shift Keying — carrier amplitude changes per bit. Low
-                noise immunity.
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-title">FSK</div>
-              <p>
-                Frequency Shift Keying — frequency changes. Better noise
-                immunity. Used in modems.
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-title">PSK</div>
-              <p>
-                Phase Shift Keying — phase changes. BPSK (2 phases), QPSK (4
-                phases).
-              </p>
-            </div>
-            <div class="card">
-              <div class="card-title">QAM</div>
-              <p>
-                Quadrature AM — combines ASK + PSK. Very efficient. Used in DSL,
-                5G.
-              </p>
-            </div>
-          </div>
-
-          <h3>Analog-to-Digital (PCM)</h3>
-          <p>
-            <strong>Pulse Code Modulation</strong> has 3 steps:
-            <em>Sampling</em> (at ≥ 2× max frequency per Nyquist),
-            <em>Quantization</em> (assign discrete levels),
-            <em>Encoding</em> (convert to binary).
-          </p>
-        </section>
-
-        <!-- ════════════════════════════════ S7: Multiplexing ════════════════════════════════ -->
-        <section class="section" id="s7">
-          <div class="section-title">Multiplexing</div>
-          <div class="section-subtitle">Unit 2 · FDM · TDM · WDM</div>
-
-          <p>
-            <strong>Multiplexing</strong> combines multiple signals onto one
-            shared medium to maximize bandwidth efficiency. A
-            <em>multiplexer (MUX)</em> combines signals at the sender; a
-            <em>demultiplexer (DEMUX)</em> separates them at the receiver.
-          </p>
-
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">FDM — Frequency Division</div>
-              <p>
-                Each signal uses a different frequency band (channel). Channels
-                are separated by <em>guard bands</em>. Used in AM/FM radio,
-                cable TV, ADSL.
-              </p>
-              <span class="tag">Analog</span>
-            </div>
-            <div class="card">
-              <div class="card-title">TDM — Time Division</div>
-              <p>
-                All signals share the full bandwidth but in different time
-                slots. Two types: Synchronous (fixed slots) and
-                Statistical/Asynchronous (dynamic).
-              </p>
-              <span class="tag">Digital</span>
-            </div>
-            <div class="card">
-              <div class="card-title">WDM — Wavelength Division</div>
-              <p>
-                Multiple optical signals at different wavelengths on a single
-                fiber. DWDM (Dense WDM) packs many channels. Used in fiber optic
-                backbones.
-              </p>
-              <span class="tag">Optical</span>
-            </div>
-            <div class="card">
-              <div class="card-title">CDM — Code Division</div>
-              <p>
-                Each sender uses a unique code (chip sequence). All transmit
-                simultaneously on same frequency. Used in CDMA mobile networks.
-              </p>
-              <span class="tag">Spread Spectrum</span>
-            </div>
-          </div>
-
-          <h3>T-Carrier / TDM Hierarchy</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Level</th>
-                  <th>DS Level</th>
-                  <th>Channels</th>
-                  <th>Data Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>T-1</td>
-                  <td>DS-1</td>
-                  <td>24 DS-0s</td>
-                  <td>1.544 Mbps</td>
-                </tr>
-                <tr>
-                  <td>T-2</td>
-                  <td>DS-2</td>
-                  <td>96 DS-0s</td>
-                  <td>6.312 Mbps</td>
-                </tr>
-                <tr>
-                  <td>T-3</td>
-                  <td>DS-3</td>
-                  <td>672 DS-0s</td>
-                  <td>44.736 Mbps</td>
-                </tr>
-                <tr>
-                  <td>T-4</td>
-                  <td>DS-4</td>
-                  <td>4032 DS-0s</td>
-                  <td>274.176 Mbps</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S8: Transmission Media ════════════════════════════════ -->
-        <section class="section" id="s8">
-          <div class="section-title">Transmission Media</div>
-          <div class="section-subtitle">Unit 2 · Physical Layer</div>
-
-          <h3>Guided (Wired) Media</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Medium</th>
-                  <th>Bandwidth</th>
-                  <th>Max Distance</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Twisted Pair (UTP/STP)</td>
-                  <td>Up to 10 Gbps</td>
-                  <td>100 m (Cat6)</td>
-                  <td>Cheapest; susceptible to EMI; categories Cat3–Cat8</td>
-                </tr>
-                <tr>
-                  <td>Coaxial Cable</td>
-                  <td>Up to 1 GHz</td>
-                  <td>Km range</td>
-                  <td>Better shielding; used in cable TV, old Ethernet</td>
-                </tr>
-                <tr>
-                  <td>Fiber Optic</td>
-                  <td>Tbps</td>
-                  <td>Thousands of km</td>
-                  <td>No EMI; immune to tapping; SMF vs MMF</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Unguided (Wireless) Media</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Frequency</th>
-                  <th>Range</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Radio Waves</td>
-                  <td>3 kHz – 1 GHz</td>
-                  <td>Omnidirectional</td>
-                  <td>AM/FM, cellular; penetrates walls</td>
-                </tr>
-                <tr>
-                  <td>Microwave</td>
-                  <td>1 GHz – 300 GHz</td>
-                  <td>Line-of-sight</td>
-                  <td>Point-to-point; towers every ~50 km</td>
-                </tr>
-                <tr>
-                  <td>Infrared</td>
-                  <td>300 GHz – 400 THz</td>
-                  <td>Short range</td>
-                  <td>TV remotes, IrDA; can't penetrate walls</td>
-                </tr>
-                <tr>
-                  <td>Satellite</td>
-                  <td>GHz bands</td>
-                  <td>Global</td>
-                  <td>GEO (36000 km), MEO, LEO; propagation delay</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="callout info">
-            <strong>Fiber Optic — SMF vs MMF</strong>
-            <em>Single-Mode Fiber (SMF)</em>: Very thin core (~9µm), uses laser,
-            very long distances, expensive. <em>Multi-Mode Fiber (MMF)</em>:
-            Wider core (~50-62.5µm), uses LED, shorter distances, cheaper. Used
-            in buildings/campus.
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S9: Switching ════════════════════════════════ -->
-        <section class="section" id="s9">
-          <div class="section-title">Switching Techniques</div>
-          <div class="section-subtitle">
-            Unit 2 · Circuit · Message · Packet
-          </div>
-
-          <p>
-            Switching determines how data is routed through a network. Three
-            fundamental approaches exist:
-          </p>
-
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">Circuit Switching</div>
-              <p>
-                A <em>dedicated physical path</em> is established before
-                communication. Resources are reserved for the entire duration.
-                Example: Traditional PSTN telephone.
-              </p>
-              <span class="tag">3 Phases: Setup → Transfer → Teardown</span>
-            </div>
-            <div class="card">
-              <div class="card-title">Message Switching</div>
-              <p>
-                Entire message is stored at each intermediate node, then
-                forwarded. <em>Store-and-forward</em>. No dedicated path. Old
-                telegraph networks.
-              </p>
-              <span class="tag">Store and Forward</span>
-            </div>
-            <div class="card">
-              <div class="card-title">Packet Switching</div>
-              <p>
-                Message is broken into <em>packets</em>. Each packet
-                independently routed. Two types:
-                <em>Datagram</em> (connectionless, IP) and
-                <em>Virtual Circuit</em> (connection-oriented, ATM).
-              </p>
-              <span class="tag">The Internet uses this</span>
-            </div>
-          </div>
-
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>Circuit Switching</th>
-                  <th>Packet Switching</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Dedicated path</td>
-                  <td>Yes</td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <td>Bandwidth</td>
-                  <td>Fixed, reserved</td>
-                  <td>Dynamic, shared</td>
-                </tr>
-                <tr>
-                  <td>Delay</td>
-                  <td>Low (after setup)</td>
-                  <td>Variable (queuing)</td>
-                </tr>
-                <tr>
-                  <td>Efficiency</td>
-                  <td>Low (idle waste)</td>
-                  <td>High</td>
-                </tr>
-                <tr>
-                  <td>Failure handling</td>
-                  <td>Re-setup required</td>
-                  <td>Rerouting per packet</td>
-                </tr>
-                <tr>
-                  <td>Example</td>
-                  <td>PSTN phone call</td>
-                  <td>Internet (IP), Wi-Fi</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S10: DLC ════════════════════════════════ -->
-        <section class="section" id="s10">
-          <div class="section-title">Data-Link Control (DLC)</div>
-          <div class="section-subtitle">
-            Unit 3 · Framing · Error Control · Flow Control
-          </div>
-
-          <p>
-            The Data-Link Layer is split into two sublayers in IEEE
-            architecture: <strong>LLC (Logical Link Control)</strong> and
-            <strong>MAC (Media Access Control)</strong>.
-          </p>
-
-          <h3>DLC Services</h3>
-          <ul>
-            <li>
-              <strong>Framing</strong> — Encapsulates packets into frames.
-              Delimited by flags or character counts.
-            </li>
-            <li>
-              <strong>Error Control</strong> — Detects and/or corrects errors
-              (CRC, Hamming code, parity).
-            </li>
-            <li>
-              <strong>Flow Control</strong> — Prevents fast sender from
-              overwhelming slow receiver.
-            </li>
-          </ul>
-
-          <h3>Error Detection Methods</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Method</th>
-                  <th>How it works</th>
-                  <th>Detects</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Parity Bit</td>
-                  <td>One extra bit to make total 1s even/odd</td>
-                  <td>Single bit errors only</td>
-                </tr>
-                <tr>
-                  <td>CRC (Cyclic Redundancy Check)</td>
-                  <td>Polynomial division; remainder appended to frame</td>
-                  <td>Burst errors; very powerful</td>
-                </tr>
-                <tr>
-                  <td>Checksum</td>
-                  <td>Sum of all bytes; complement appended</td>
-                  <td>Used in TCP/UDP/IP headers</td>
-                </tr>
-                <tr>
-                  <td>Hamming Code</td>
-                  <td>Uses redundant parity bits at power-of-2 positions</td>
-                  <td>Detects AND corrects single-bit errors</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Flow Control Methods</h3>
-          <ul>
-            <li>
-              <strong>Stop-and-Wait</strong> — Send one frame, wait for ACK.
-              Simple but inefficient for high-delay links.
-            </li>
-            <li>
-              <strong>Sliding Window</strong> — Multiple frames in flight
-              simultaneously. Window size = how many unACKed frames allowed.
-            </li>
-          </ul>
-
-          <div class="callout info">
-            <strong>Efficiency formula</strong>
-            For Stop-and-Wait: Efficiency = 1 / (1 + 2a) where a = propagation
-            delay / transmission time. Large 'a' (satellite links) → very
-            inefficient → need larger window sizes.
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S11: Multiple Access ════════════════════════════════ -->
-        <section class="section" id="s11">
-          <div class="section-title">Multiple Access Protocols</div>
-          <div class="section-subtitle">Unit 3 · MAC Sublayer</div>
-
-          <p>
-            When multiple stations share a broadcast medium, a
-            <strong>Multiple Access Protocol</strong> coordinates who transmits
-            when to avoid collisions.
-          </p>
-
-          <h3>Three Categories</h3>
-
-          <h4>1. Random Access</h4>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Protocol</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>ALOHA</td>
-                  <td>
-                    Transmit whenever ready. If collision, wait random time and
-                    retry. 18% efficiency max.
-                  </td>
-                </tr>
-                <tr>
-                  <td>Slotted ALOHA</td>
-                  <td>Sync to slots. Up to 37% efficiency.</td>
-                </tr>
-                <tr>
-                  <td>CSMA</td>
-                  <td>
-                    Carrier Sense: listen before transmit. Reduces but doesn't
-                    eliminate collisions.
-                  </td>
-                </tr>
-                <tr>
-                  <td>CSMA/CD</td>
-                  <td>
-                    +Collision Detection: abort on collision, jam signal,
-                    backoff. Used in Ethernet.
-                  </td>
-                </tr>
-                <tr>
-                  <td>CSMA/CA</td>
-                  <td>
-                    +Collision Avoidance: IFS + backoff before transmit. Used in
-                    Wi-Fi (802.11).
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h4>2. Controlled Access</h4>
-          <ul>
-            <li>
-              <strong>Reservation</strong> — Stations reserve time slots in a
-              mini-frame.
-            </li>
-            <li>
-              <strong>Polling</strong> — Central controller (primary) polls
-              secondary stations in turn.
-            </li>
-            <li>
-              <strong>Token Passing</strong> — A token circulates; only the
-              token holder can transmit. Used in Token Ring, FDDI.
-            </li>
-          </ul>
-
-          <h4>3. Channelization</h4>
-          <ul>
-            <li>
-              <strong>FDMA</strong> — Each station gets a frequency band. Used
-              in first-gen mobile.
-            </li>
-            <li>
-              <strong>TDMA</strong> — Each station gets time slots. Used in GSM.
-            </li>
-            <li>
-              <strong>CDMA</strong> — Each station uses a unique code. Used in
-              3G/WCDMA.
-            </li>
-          </ul>
-        </section>
-
-        <!-- ════════════════════════════════ S12: Ethernet ════════════════════════════════ -->
-        <section class="section" id="s12">
-          <div class="section-title">Wired LANs — Ethernet</div>
-          <div class="section-subtitle">Unit 3 · IEEE 802.3</div>
-
-          <p>
-            Ethernet (IEEE 802.3) is the dominant wired LAN technology.
-            Originally used a bus topology with CSMA/CD; modern Ethernet uses
-            <strong>full-duplex switched star topology</strong> — no collisions.
-          </p>
-
-          <h3>Ethernet Frame Format</h3>
-          <div class="code-box">
-            <span class="c"
-              >| Preamble | SFD | Dest MAC | Src MAC | Type/Len | Data (Payload)
-              | CRC | | 7 bytes | 1B | 6 bytes | 6 bytes | 2 bytes | 46–1500
-              bytes | 4B |</span
-            >
-
-            <span class="c">SFD = Start Frame Delimiter (10101011)</span>
-            <span class="c"
-              >Minimum frame: 64 bytes (to detect collisions in 10 Mbps
-              Ethernet)</span
-            >
-            <span class="c"
-              >Maximum frame: 1518 bytes (1522 with VLAN tag)</span
-            >
-          </div>
-
-          <h3>Ethernet Evolution</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Standard</th>
-                  <th>Speed</th>
-                  <th>Medium</th>
-                  <th>Max Segment</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>10BASE-T</td>
-                  <td>10 Mbps</td>
-                  <td>UTP Cat3</td>
-                  <td>100 m</td>
-                </tr>
-                <tr>
-                  <td>100BASE-TX (Fast Ethernet)</td>
-                  <td>100 Mbps</td>
-                  <td>UTP Cat5</td>
-                  <td>100 m</td>
-                </tr>
-                <tr>
-                  <td>1000BASE-T (Gigabit)</td>
-                  <td>1 Gbps</td>
-                  <td>UTP Cat5e/6</td>
-                  <td>100 m</td>
-                </tr>
-                <tr>
-                  <td>10GBASE-T</td>
-                  <td>10 Gbps</td>
-                  <td>UTP Cat6a</td>
-                  <td>100 m</td>
-                </tr>
-                <tr>
-                  <td>1000BASE-SX</td>
-                  <td>1 Gbps</td>
-                  <td>MMF</td>
-                  <td>550 m</td>
-                </tr>
-                <tr>
-                  <td>1000BASE-LX</td>
-                  <td>1 Gbps</td>
-                  <td>SMF</td>
-                  <td>5 km</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>MAC Address</h3>
-          <p>
-            A 48-bit (6-byte) hardware address burned into NIC. Format:
-            <span class="highlight">AA:BB:CC:DD:EE:FF</span>. First 3 bytes =
-            OUI (manufacturer ID). Last 3 bytes = device ID.
-            <strong>Broadcast address: FF:FF:FF:FF:FF:FF</strong>
-          </p>
-        </section>
-
-        <!-- ════════════════════════════════ S13: Wireless ════════════════════════════════ -->
-        <section class="section" id="s13">
-          <div class="section-title">Wireless: IEEE 802.11 &amp; Bluetooth</div>
-          <div class="section-subtitle">Unit 3 · Wireless Data-Link</div>
-
-          <h3>IEEE 802.11 (Wi-Fi)</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Standard</th>
-                  <th>Year</th>
-                  <th>Freq</th>
-                  <th>Max Speed</th>
-                  <th>Wi-Fi Gen</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>802.11b</td>
-                  <td>1999</td>
-                  <td>2.4 GHz</td>
-                  <td>11 Mbps</td>
-                  <td>Wi-Fi 1</td>
-                </tr>
-                <tr>
-                  <td>802.11a</td>
-                  <td>1999</td>
-                  <td>5 GHz</td>
-                  <td>54 Mbps</td>
-                  <td>Wi-Fi 2</td>
-                </tr>
-                <tr>
-                  <td>802.11g</td>
-                  <td>2003</td>
-                  <td>2.4 GHz</td>
-                  <td>54 Mbps</td>
-                  <td>Wi-Fi 3</td>
-                </tr>
-                <tr>
-                  <td>802.11n</td>
-                  <td>2009</td>
-                  <td>2.4/5 GHz</td>
-                  <td>600 Mbps</td>
-                  <td>Wi-Fi 4</td>
-                </tr>
-                <tr>
-                  <td>802.11ac</td>
-                  <td>2013</td>
-                  <td>5 GHz</td>
-                  <td>6.9 Gbps</td>
-                  <td>Wi-Fi 5</td>
-                </tr>
-                <tr>
-                  <td>802.11ax</td>
-                  <td>2019</td>
-                  <td>2.4/5/6 GHz</td>
-                  <td>9.6 Gbps</td>
-                  <td>Wi-Fi 6</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Wi-Fi MAC — CSMA/CA + DIFS/SIFS</h3>
-          <ul>
-            <li>
-              Cannot use CSMA/CD (can't detect collisions while transmitting
-              wirelessly)
-            </li>
-            <li>
-              Uses <strong>CSMA/CA</strong> with IFS (Interframe Space): SIFS
-              (short), DIFS (distributed)
-            </li>
-            <li>
-              <strong>Hidden Station Problem</strong> — solved by RTS/CTS
-              mechanism
-            </li>
-            <li>
-              <strong>Exposed Station Problem</strong> — a station unnecessarily
-              defers
-            </li>
-            <li>
-              Modes: <strong>Infrastructure</strong> (with AP) and
-              <strong>Ad hoc / IBSS</strong> (direct)
-            </li>
-          </ul>
-
-          <h3>Bluetooth (IEEE 802.15.1)</h3>
-          <ul>
-            <li>
-              Short range (&lt;10 m), 2.4 GHz, uses
-              <strong>FHSS</strong> (Frequency Hopping Spread Spectrum)
-            </li>
-            <li>
-              Forms a <strong>piconet</strong>: 1 master + up to 7 active slaves
-            </li>
-            <li>Multiple piconets form a <strong>scatternet</strong></li>
-            <li>
-              Versions: Bluetooth 1.x (1 Mbps), 2.x EDR (3 Mbps), 4.x BLE (low
-              energy), 5.x (2 Mbps+)
-            </li>
-            <li>Layers: Radio → Baseband → L2CAP → Application protocols</li>
-          </ul>
-        </section>
-
-        <!-- ════════════════════════════════ S14: WiMAX, Cellular, Satellite ════════════════════════════════ -->
-        <section class="section" id="s14">
-          <div class="section-title">
-            WiMAX · Cellular · Satellite · Mobile IP
-          </div>
-          <div class="section-subtitle">Unit 3 · Wide-area Wireless</div>
-
-          <h3>WiMAX (IEEE 802.16)</h3>
-          <p>
-            Wireless MAN technology. Up to 70 Mbps, range ~50 km. Uses OFDM.
-            Designed as a "last mile" broadband alternative. Fixed WiMAX
-            (802.16d) and Mobile WiMAX (802.16e).
-          </p>
-
-          <h3>Cellular Networks</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Generation</th>
-                  <th>Key Tech</th>
-                  <th>Data Speed</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1G</td>
-                  <td>AMPS, analog FDMA</td>
-                  <td>Voice only</td>
-                </tr>
-                <tr>
-                  <td>2G</td>
-                  <td>GSM (TDMA), CDMAONE</td>
-                  <td>9.6–14.4 kbps</td>
-                </tr>
-                <tr>
-                  <td>2.5G</td>
-                  <td>GPRS, EDGE</td>
-                  <td>Up to 384 kbps</td>
-                </tr>
-                <tr>
-                  <td>3G</td>
-                  <td>WCDMA / UMTS, CDMA2000</td>
-                  <td>2–14 Mbps</td>
-                </tr>
-                <tr>
-                  <td>4G LTE</td>
-                  <td>OFDMA, MIMO</td>
-                  <td>Up to 300 Mbps</td>
-                </tr>
-                <tr>
-                  <td>5G</td>
-                  <td>mmWave, massive MIMO</td>
-                  <td>Multi-Gbps</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Satellite Networks</h3>
-          <ul>
-            <li>
-              <strong>GEO</strong> (36,000 km): Weather, TV broadcast, GPS-like
-              systems. ~270ms propagation delay.
-            </li>
-            <li>
-              <strong>MEO</strong> (5,000-15,000 km): GPS satellites (20,200
-              km). Medium delay.
-            </li>
-            <li>
-              <strong>LEO</strong> (200-1,400 km): Low latency (~5-15ms),
-              Starlink, Iridium. Need many satellites for coverage.
-            </li>
-          </ul>
-
-          <h3>Mobile IP</h3>
-          <p>
-            Allows a mobile device to keep its IP address as it moves across
-            networks. Key entities: <strong>Home Agent (HA)</strong>,
-            <strong>Foreign Agent (FA)</strong>,
-            <strong>Care-of Address (CoA)</strong>. Process: Device registers
-            CoA with HA → HA tunnels packets to FA → FA delivers to device.
-          </p>
-        </section>
-
-        <!-- ════════════════════════════════ S15: Error Control Protocols ════════════════════════════════ -->
-        <section class="section" id="s15">
-          <div class="section-title">
-            Transport Layer — Error Control Protocols
-          </div>
-          <div class="section-subtitle">Unit 4 · ARQ Protocols</div>
-
-          <p>
-            Automatic Repeat Request (ARQ) protocols handle errors by requesting
-            retransmission. Four protocols from simplest to most efficient:
-          </p>
-
-          <h3>1. Simple (Unreliable)</h3>
-          <p>
-            No error control, no flow control. Sender just transmits; receiver
-            just receives. No ACKs. Suitable only if no errors expected (or
-            handled at higher layer). Used conceptually to understand the
-            baseline.
-          </p>
-
-          <h3>2. Stop-and-Wait ARQ</h3>
-          <ul>
-            <li>Send one frame → wait for ACK before sending next</li>
-            <li>If ACK not received in timeout period → retransmit</li>
-            <li>Sequence numbers: 0 and 1 only (1 bit)</li>
-            <li>
-              Problem: Very poor efficiency when propagation delay is large
-            </li>
-          </ul>
-          <div class="code-box">
-            <span class="c"
-              >Efficiency η = 1 / (1 + 2a) where a = Tp / Tf (propagation time /
-              frame transmission time)</span
-            >
-          </div>
-
-          <h3>3. Go-Back-N (GBN)</h3>
-          <ul>
-            <li>
-              Sender can have up to <strong>2ⁿ - 1</strong> unACKed frames in
-              flight (window size)
-            </li>
-            <li>
-              On error/timeout: retransmit the errored frame AND ALL subsequent
-              frames
-            </li>
-            <li>
-              Receiver only accepts in-order frames; discards out-of-order
-            </li>
-            <li>Receiver window size = <strong>1</strong></li>
-            <li>
-              Simple receiver logic but wastes bandwidth on retransmissions
-            </li>
-          </ul>
-
-          <div class="callout warn">
-            <strong>GBN Window Constraint</strong>
-            Window size ≤ 2ⁿ - 1 (for n-bit sequence numbers). If = 2ⁿ, receiver
-            can't distinguish new frame from retransmitted old frame.
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S16: SR & Bidirectional ════════════════════════════════ -->
-        <section class="section" id="s16">
-          <div class="section-title">Selective Repeat &amp; Bidirectional</div>
-          <div class="section-subtitle">Unit 4 · SR · HDLC · PPP</div>
-
-          <h3>Selective Repeat (SR)</h3>
-          <ul>
-            <li>
-              Only the specific errored frame is retransmitted (not all
-              subsequent)
-            </li>
-            <li>Receiver has a buffer to hold out-of-order frames</li>
-            <li>
-              Both sender AND receiver window size =
-              <strong>2ⁿ/2 = 2ⁿ⁻¹</strong>
-            </li>
-            <li>More efficient than GBN but more complex receiver</li>
-          </ul>
-
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>Stop-and-Wait</th>
-                  <th>Go-Back-N</th>
-                  <th>Selective Repeat</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Sender Window</td>
-                  <td>1</td>
-                  <td>2ⁿ-1</td>
-                  <td>2ⁿ⁻¹</td>
-                </tr>
-                <tr>
-                  <td>Receiver Window</td>
-                  <td>1</td>
-                  <td>1</td>
-                  <td>2ⁿ⁻¹</td>
-                </tr>
-                <tr>
-                  <td>Retransmission</td>
-                  <td>1 frame</td>
-                  <td>All from error</td>
-                  <td>Only errored</td>
-                </tr>
-                <tr>
-                  <td>Buffer needed</td>
-                  <td>No</td>
-                  <td>No (receiver)</td>
-                  <td>Yes (receiver)</td>
-                </tr>
-                <tr>
-                  <td>Efficiency</td>
-                  <td>Low</td>
-                  <td>Medium</td>
-                  <td>High</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <h3>Bidirectional Protocols (HDLC)</h3>
-          <p>
-            <strong>HDLC (High-level Data Link Control)</strong> supports
-            full-duplex. Three modes:
-          </p>
-          <ul>
-            <li>
-              <strong>NRM</strong> (Normal Response Mode) — Primary/secondary;
-              secondary only responds
-            </li>
-            <li>
-              <strong>ABM</strong> (Asynchronous Balanced Mode) — Both peers
-              equal; used in PPP
-            </li>
-            <li>
-              <strong>ARM</strong> (Asynchronous Response Mode) — Secondary can
-              initiate
-            </li>
-          </ul>
-          <p>
-            <strong>PPP (Point-to-Point Protocol)</strong> — Common WAN link
-            protocol; carries IP over serial/DSL/phone links. Uses LCP for setup
-            and NCP for network layer config.
-          </p>
-        </section>
-
-        <!-- ════════════════════════════════ S17: UDP & TCP ════════════════════════════════ -->
-        <section class="section" id="s17">
-          <div class="section-title">UDP &amp; TCP</div>
-          <div class="section-subtitle">
-            Unit 4 · Internet Transport Protocols
-          </div>
-
-          <h3>UDP — User Datagram Protocol</h3>
-          <div class="card-grid">
-            <div class="card">
-              <div class="card-title">Connectionless</div>
-              <p>No handshake. Send and forget. Faster but unreliable.</p>
-            </div>
-            <div class="card">
-              <div class="card-title">No Ordering</div>
-              <p>Datagrams may arrive out of order. No retransmission.</p>
-            </div>
-            <div class="card">
-              <div class="card-title">Uses</div>
-              <p>
-                DNS, DHCP, VoIP, video streaming, online gaming — where speed >
-                reliability.
-              </p>
-            </div>
-          </div>
-          <div class="code-box">
-            <span class="c">// UDP Header (8 bytes only)</span> | Source Port
-            (16) | Dest Port (16) | | Length (16) | Checksum (16) |
-          </div>
-
-          <h3>TCP — Transmission Control Protocol</h3>
-          <ul>
-            <li>
-              <strong>Connection-oriented</strong>: 3-way handshake (SYN →
-              SYN-ACK → ACK)
-            </li>
-            <li>
-              <strong>Reliable</strong>: Sequence numbers, acknowledgments,
-              retransmission on timeout
-            </li>
-            <li>
-              <strong>Ordered delivery</strong>: Segments reordered at receiver
-            </li>
-            <li>
-              <strong>Full duplex</strong>: Simultaneous bidirectional data flow
-            </li>
-            <li>
-              <strong>Flow control</strong>: Sliding window (receiver advertises
-              rwnd)
-            </li>
-            <li>
-              <strong>Congestion control</strong>: Slow start, congestion
-              avoidance, fast retransmit, fast recovery
-            </li>
-          </ul>
-
-          <div class="code-box">
-            <span class="c">// TCP Header (20 bytes minimum)</span>
-            | Src Port (16) | Dst Port (16) | | Sequence Number (32) | |
-            Acknowledgment Number (32) | | HLEN | Reserved | Flags | Window
-            (16)| | Checksum (16) | Urgent Pointer (16)| | Options (variable) |
-
-            <span class="c">Flags: URG, ACK, PSH, RST, SYN, FIN</span>
-          </div>
-
-          <h3>TCP Connection Lifecycle</h3>
-          <div class="code-box">
-            <span class="k">3-Way Handshake (Open):</span>
-            Client → [SYN, seq=x] → Server Client ← [SYN+ACK, seq=y, ack=x+1] ←
-            Server Client → [ACK, ack=y+1] → Server
-
-            <span class="k">4-Way Handshake (Close):</span>
-            Client → [FIN] → Server Client ← [ACK] ← Server Client ← [FIN] ←
-            Server Client → [ACK] → Server (Client waits 2×MSL in TIME_WAIT
-            state)
-          </div>
-
-          <h3>TCP Congestion Control</h3>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Phase</th>
-                  <th>Behavior</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Slow Start</td>
-                  <td>
-                    cwnd starts at 1 MSS; doubles every RTT until ssthresh
-                  </td>
-                </tr>
-                <tr>
-                  <td>Congestion Avoidance</td>
-                  <td>cwnd increases by 1 MSS per RTT (linear growth)</td>
-                </tr>
-                <tr>
-                  <td>Fast Retransmit</td>
-                  <td>
-                    3 duplicate ACKs → retransmit without waiting for timeout
-                  </td>
-                </tr>
-                <tr>
-                  <td>Fast Recovery</td>
-                  <td>
-                    ssthresh = cwnd/2; cwnd = ssthresh + 3; stay in Cong.
-                    Avoidance
-                  </td>
-                </tr>
-                <tr>
-                  <td>Timeout</td>
-                  <td>ssthresh = cwnd/2; cwnd = 1; restart Slow Start</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="tbl-wrap" style="margin-top: 20px">
-            <table>
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>UDP</th>
-                  <th>TCP</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Connection</td>
-                  <td>Connectionless</td>
-                  <td>Connection-oriented</td>
-                </tr>
-                <tr>
-                  <td>Reliability</td>
-                  <td>Unreliable</td>
-                  <td>Reliable</td>
-                </tr>
-                <tr>
-                  <td>Ordering</td>
-                  <td>No guarantee</td>
-                  <td>Ordered</td>
-                </tr>
-                <tr>
-                  <td>Speed</td>
-                  <td>Fast (low overhead)</td>
-                  <td>Slower (more overhead)</td>
-                </tr>
-                <tr>
-                  <td>Header size</td>
-                  <td>8 bytes</td>
-                  <td>20+ bytes</td>
-                </tr>
-                <tr>
-                  <td>Use cases</td>
-                  <td>DNS, VoIP, streaming</td>
-                  <td>HTTP, FTP, Email, SSH</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- ════════════════════════════════ S18: Quiz ════════════════════════════════ -->
-        <section class="section" id="s18">
-          <div class="section-title">Quick Quiz</div>
-          <div class="section-subtitle">Test Your Knowledge</div>
-
-          <div class="progress-bar-wrap">
-            <div class="progress-bar">
-              <div class="progress-fill" id="qprogress" style="width: 0%"></div>
-            </div>
-            <div class="progress-label" id="qscore">0 / 10 answered</div>
-          </div>
-
-          <div id="quiz-container"></div>
-        </section>
-      </main>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Networks — Sophomore Engineering</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2234;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #7c3aed;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --mono: 'JetBrains Mono', monospace;
+    --serif: 'Fraunces', serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid noise texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-header .tag {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .sidebar-header h1 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #fff;
+  }
+  .sidebar-header p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  .progress-bar-wrap {
+    margin: 16px 20px 0;
+    background: var(--border);
+    border-radius: 2px;
+    height: 3px;
+  }
+  .progress-bar-fill {
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-text {
+    padding: 6px 20px 12px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .nav-section { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .nav-unit-label {
+    padding: 4px 20px;
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { 
+    background: rgba(0,212,255,0.08); 
+    border-left-color: var(--accent); 
+    color: var(--accent);
+  }
+  .nav-item .dot { 
+    width: 6px; height: 6px; 
+    border-radius: 50%; 
+    background: var(--border); 
+    flex-shrink: 0; 
+    transition: background 0.2s;
+  }
+  .nav-item.done .dot { background: var(--green); }
+  .nav-item.active .dot { background: var(--accent); }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 900px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-tag {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  /* Content blocks */
+  .concept-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    position: relative;
+  }
+  .concept-box::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--bg);
+    padding: 0 8px;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .concept-box h3 {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .concept-box p { color: var(--text); line-height: 1.8; margin-bottom: 10px; }
+  .concept-box p:last-child { margin-bottom: 0; }
+
+  .highlight {
+    background: rgba(0,212,255,0.1);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .highlight.warn {
+    background: rgba(245,158,11,0.08);
+    border-left-color: var(--yellow);
+  }
+  .highlight.key {
+    background: rgba(124,58,237,0.1);
+    border-left-color: var(--accent3);
+  }
+
+  /* Comparison grid */
+  .compare-grid {
+    display: grid;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .compare-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .compare-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .compare-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .compare-card h4 {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .compare-card ul { list-style: none; }
+  .compare-card ul li {
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.8;
+    padding-left: 12px;
+    position: relative;
+  }
+  .compare-card ul li::before { content: '→'; position: absolute; left: 0; color: var(--muted); }
+
+  /* Diagram */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  .diagram pre {
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .diagram-caption {
+    color: var(--muted);
+    font-size: 11px;
+    text-align: center;
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 12px;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  tr:hover td { background: rgba(0,212,255,0.03); }
+
+  /* Formula */
+  .formula {
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 6px;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 15px;
+    color: #c4b5fd;
+    margin: 16px 0;
+    font-family: var(--mono);
+    letter-spacing: 1px;
+  }
+
+  /* Timeline */
+  .timeline { margin: 20px 0; }
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 20px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 32px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .timeline-item:last-child::before { display: none; }
+  .timeline-year {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--accent);
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+  .timeline-content h4 { color: #fff; font-size: 13px; margin-bottom: 4px; }
+  .timeline-content p { color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+  /* Quiz */
+  .quiz-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 28px 0;
+  }
+  .quiz-box h3 {
+    font-size: 12px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .quiz-q {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+    font-size: 13px;
+    text-align: left;
+  }
+  .quiz-opt:hover { border-color: var(--accent); color: var(--accent); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(16,185,129,0.1); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(239,68,68,0.1); color: var(--red); }
+  .quiz-feedback {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .quiz-feedback.bad { background: rgba(239,68,68,0.08); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+  .quiz-next {
+    margin-top: 14px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: none;
+  }
+  .quiz-next.show { display: inline-block; }
+
+  /* Nav buttons */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+  .nav-btn.primary:hover { background: #00b8d9; }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .mark-btn {
+    background: transparent;
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 11px;
+    margin-bottom: 24px;
+    transition: all 0.2s;
+  }
+  .mark-btn:hover { background: rgba(16,185,129,0.1); }
+  .mark-btn.marked { background: rgba(16,185,129,0.15); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 220px; min-width: 220px; }
+    .main { padding: 24px 20px; }
+    .compare-grid.cols-3 { grid-template-columns: 1fr; }
+    .compare-grid.cols-2 { grid-template-columns: 1fr; }
+    .section-title { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <div class="tag">// UNIT 1 + 2</div>
+    <h1>Computer Networks</h1>
+    <p>Sophomore Engineering — Interactive Notes</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+  <div class="progress-text" id="progressText">0 / 18 topics read</div>
+
+  <div class="nav-section">
+    <div class="nav-unit-label">Unit 1 — Foundations</div>
+    <div class="nav-item active" data-section="0"><span class="dot"></span>Overview & Network Types</div>
+    <div class="nav-item" data-section="1"><span class="dot"></span>Network Topologies</div>
+    <div class="nav-item" data-section="2"><span class="dot"></span>OSI & TCP/IP Models</div>
+    <div class="nav-item" data-section="3"><span class="dot"></span>History & Standards</div>
+    <div class="nav-item" data-section="4"><span class="dot"></span>Data & Signals</div>
+    <div class="nav-item" data-section="5"><span class="dot"></span>Digital Transmission</div>
+    <div class="nav-item" data-section="6"><span class="dot"></span>Analog Transmission</div>
+    <div class="nav-item" data-section="7"><span class="dot"></span>Bandwidth & Multiplexing</div>
+    <div class="nav-item" data-section="8"><span class="dot"></span>Transmission Media</div>
+    <div class="nav-item" data-section="9"><span class="dot"></span>Switching</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-unit-label">Unit 2 — Layers</div>
+    <div class="nav-item" data-section="10"><span class="dot"></span>Data Link Layer — Wired</div>
+    <div class="nav-item" data-section="11"><span class="dot"></span>Multiple Access Protocols</div>
+    <div class="nav-item" data-section="12"><span class="dot"></span>Wired LANs (Ethernet)</div>
+    <div class="nav-item" data-section="13"><span class="dot"></span>Data Link — Wireless</div>
+    <div class="nav-item" data-section="14"><span class="dot"></span>IEEE 802.11, Bluetooth, WiMAX</div>
+    <div class="nav-item" data-section="15"><span class="dot"></span>Cellular & Satellite</div>
+    <div class="nav-item" data-section="16"><span class="dot"></span>Transport Layer — ARQ Protocols</div>
+    <div class="nav-item" data-section="17"><span class="dot"></span>UDP & TCP</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- 0: Overview & Network Types -->
+<div class="section active" id="s0">
+  <div class="section-tag">// UNIT 1 · TOPIC 01</div>
+  <div class="section-title">Network Types & Classifications</div>
+  <button class="mark-btn" onclick="markDone(0)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="DEFINITION">
+    <h3>What is a Computer Network?</h3>
+    <p>A <strong style="color:var(--accent)">computer network</strong> is a collection of interconnected devices (computers, printers, servers) that can share resources and communicate with each other. Networks are classified by <em>geographic scope</em>, <em>transmission medium</em>, and <em>communication mode</em>.</p>
+  </div>
+
+  <div class="highlight key">💡 Key mental model: Think of networks like postal systems. LAN = your office building's internal mail. MAN = city mail. WAN = national/international post.</div>
+
+  <div class="compare-grid cols-3">
+    <div class="compare-card">
+      <h4>🏠 LAN</h4>
+      <ul>
+        <li>Local Area Network</li>
+        <li>Covers single building / campus</li>
+        <li>Range: up to ~1 km</li>
+        <li>High speed: 100 Mbps–10 Gbps</li>
+        <li>Privately owned</li>
+        <li>Low error rates</li>
+        <li>e.g., Office network, college lab</li>
+      </ul>
     </div>
-
-    <script>
-      // ── Navigation ──
-      function show(id) {
-        document
-          .querySelectorAll(".section")
-          .forEach((s) => s.classList.remove("active"));
-        document
-          .querySelectorAll("nav a")
-          .forEach((a) => a.classList.remove("active"));
-        document.getElementById(id).classList.add("active");
-        document.getElementById("nav-" + id).classList.add("active");
-        window.scrollTo(0, 0);
-        return false;
-      }
-
-      // ── Quiz Data ──
-      const questions = [
-        {
-          q: "Which layer of the OSI model is responsible for reliable end-to-end data delivery?",
-          opts: [
-            "Network Layer",
-            "Data-Link Layer",
-            "Transport Layer",
-            "Session Layer",
-          ],
-          ans: 2,
-        },
-        {
-          q: "In CSMA/CD, what does a station do when it detects a collision?",
-          opts: [
-            "Ignores it and continues",
-            "Stops, sends a jam signal, waits random time, retries",
-            "Drops the frame permanently",
-            "Asks the MAC layer to retry",
-          ],
-          ans: 1,
-        },
-        {
-          q: "Shannon's theorem gives the channel capacity based on:",
-          opts: [
-            "Signal levels only",
-            "Bandwidth and signal-to-noise ratio",
-            "Number of stations",
-            "Type of encoding",
-          ],
-          ans: 1,
-        },
-        {
-          q: "What is the maximum window size for Go-Back-N with 3-bit sequence numbers?",
-          opts: ["8", "7", "4", "3"],
-          ans: 1,
-        },
-        {
-          q: "Which wireless technology uses FHSS and forms piconets?",
-          opts: ["Wi-Fi 802.11", "WiMAX", "Bluetooth", "Zigbee"],
-          ans: 2,
-        },
-        {
-          q: "A TCP connection is terminated with:",
-          opts: [
-            "2-way handshake",
-            "3-way handshake",
-            "4-way handshake",
-            "Single FIN packet",
-          ],
-          ans: 2,
-        },
-        {
-          q: "Which switching technique reserves a dedicated path for the entire duration of communication?",
-          opts: [
-            "Packet switching",
-            "Message switching",
-            "Circuit switching",
-            "Frame relay",
-          ],
-          ans: 2,
-        },
-        {
-          q: "WDM (Wavelength Division Multiplexing) is primarily used with:",
-          opts: ["Coaxial cable", "Twisted pair", "Fiber optic", "Wireless"],
-          ans: 2,
-        },
-        {
-          q: "What does the hidden station problem in Wi-Fi refer to?",
-          opts: [
-            "Station moves out of range",
-            "Two stations can't hear each other but both transmit to same AP, causing collision",
-            "AP has too many connected clients",
-            "Station uses wrong SSID",
-          ],
-          ans: 1,
-        },
-        {
-          q: "In TCP slow start, the congestion window (cwnd) grows:",
-          opts: [
-            "Linearly by 1 MSS per RTT",
-            "Decreases per RTT",
-            "Doubles every RTT",
-            "Stays fixed at ssthresh",
-          ],
-          ans: 2,
-        },
-      ];
-
-      let answered = 0;
-      const container = document.getElementById("quiz-container");
-
-      questions.forEach((q, qi) => {
-        const div = document.createElement("div");
-        div.className = "quiz-wrap";
-        div.id = "q" + qi;
-        div.innerHTML = `<div class="quiz-q">Q${qi + 1}. ${q.q}</div>
-    <div class="quiz-opts">
-      ${q.opts.map((o, i) => `<div class="quiz-opt" onclick="answer(${qi},${i})">${String.fromCharCode(65 + i)}. ${o}</div>`).join("")}
+    <div class="compare-card">
+      <h4>🏙️ MAN</h4>
+      <ul>
+        <li>Metropolitan Area Network</li>
+        <li>Covers a city/town</li>
+        <li>Range: 5–50 km</li>
+        <li>Medium speed: 10–1000 Mbps</li>
+        <li>Public or private</li>
+        <li>e.g., Cable TV network, city Wi-Fi</li>
+      </ul>
     </div>
-    <div class="quiz-feedback" id="fb${qi}"></div>`;
-        container.appendChild(div);
-      });
+    <div class="compare-card">
+      <h4>🌍 WAN</h4>
+      <ul>
+        <li>Wide Area Network</li>
+        <li>Covers countries/continents</li>
+        <li>Range: unlimited</li>
+        <li>Lower speed (varies)</li>
+        <li>Public/leased lines</li>
+        <li>Higher error rates</li>
+        <li>e.g., The Internet, ATM network</li>
+      </ul>
+    </div>
+  </div>
 
-      function answer(qi, chosen) {
-        const q = questions[qi];
-        const wrap = document.getElementById("q" + qi);
-        const opts = wrap.querySelectorAll(".quiz-opt");
-        const fb = document.getElementById("fb" + qi);
-        if (wrap.dataset.done) return;
-        wrap.dataset.done = "1";
-        answered++;
+  <div class="concept-box" data-label="MEDIUM">
+    <h3>Wired vs. Wireless Networks</h3>
+    <div class="compare-grid cols-2">
+      <div>
+        <h4 style="color:var(--accent);margin-bottom:8px;font-size:12px">WIRED</h4>
+        <p>Data travels over physical cables (twisted pair, coaxial, fiber optic). More <strong style="color:var(--green)">reliable, secure, and faster</strong>. Harder to install (infrastructure needed).</p>
+      </div>
+      <div>
+        <h4 style="color:var(--accent2);margin-bottom:8px;font-size:12px">WIRELESS</h4>
+        <p>Data travels via radio waves / microwaves / IR. More <strong style="color:var(--yellow)">flexible and mobile</strong>. Subject to interference, eavesdropping, and range limits.</p>
+      </div>
+    </div>
+  </div>
 
-        opts.forEach((o, i) => {
-          o.style.pointerEvents = "none";
-          if (i === q.ans) o.classList.add("correct");
-          else if (i === chosen && i !== q.ans) o.classList.add("wrong");
-        });
+  <div class="concept-box" data-label="COMMUNICATION MODE">
+    <h3>Broadcast vs. Point-to-Point</h3>
+    <div class="compare-grid cols-2">
+      <div>
+        <h4 style="color:var(--accent);margin-bottom:8px;font-size:12px">BROADCAST</h4>
+        <p>One node sends data that ALL other nodes receive. They check address fields to decide relevance. Used in older Ethernet (bus), Wi-Fi.</p>
+        <p style="color:var(--muted);font-size:11px">TV transmission is a real-world analogy — one channel, everyone receives.</p>
+      </div>
+      <div>
+        <h4 style="color:var(--accent2);margin-bottom:8px;font-size:12px">POINT-TO-POINT</h4>
+        <p>A dedicated link connects exactly two devices. Data travels directly. Used in PPP links, fiber trunks, phone calls.</p>
+        <p style="color:var(--muted);font-size:11px">Like a phone call — direct line between you and one other person.</p>
+      </div>
+    </div>
+  </div>
 
-        fb.style.display = "block";
-        if (chosen === q.ans) {
-          fb.textContent = "✓ Correct!";
-          fb.style.color = "var(--accent3)";
-        } else {
-          fb.textContent = `✗ Incorrect. Correct answer: ${String.fromCharCode(65 + q.ans)}. ${q.opts[q.ans]}`;
-          fb.style.color = "var(--accent2)";
-        }
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">A university campus network connecting multiple departments within a 500-meter radius would best be classified as a:</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,false)">A. WAN</button>
+      <button class="quiz-opt" onclick="answer(this,true)">B. LAN</button>
+      <button class="quiz-opt" onclick="answer(this,false)">C. MAN</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. PAN</button>
+    </div>
+    <div class="quiz-feedback" id="qf0"></div>
+    <button class="quiz-next" onclick="nextSection(0)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" disabled>← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(1)">Next: Topologies →</button>
+  </div>
+</div>
 
-        document.getElementById("qprogress").style.width =
-          (answered / questions.length) * 100 + "%";
-        document.getElementById("qscore").textContent =
-          answered + " / " + questions.length + " answered";
-      }
-    </script>
-  </body>
+<!-- 1: Topologies -->
+<div class="section" id="s1">
+  <div class="section-tag">// UNIT 1 · TOPIC 02</div>
+  <div class="section-title">Network Topologies</div>
+  <button class="mark-btn" onclick="markDone(1)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="DEFINITION">
+    <h3>What is a Topology?</h3>
+    <p>A <strong style="color:var(--accent)">topology</strong> is the geometric arrangement of nodes and links in a network. It can be <em>physical</em> (actual wiring) or <em>logical</em> (how data flows). Topology affects cost, scalability, fault tolerance, and performance.</p>
+  </div>
+
+  <div class="diagram">
+    <pre>
+BUS topology:       ─────●─────●─────●─────●─────
+                         A     B     C     D
+
+STAR topology:              ●─── A
+                            │
+                       B ───■ HUB/SW ─── C
+                            │
+                            ●─── D
+
+RING topology:         A ─── B
+                       │     │
+                       D ─── C
+
+MESH topology:    A ───────── B
+                  │ ╲       ╱ │
+                  │   ╲   ╱   │
+                  │     ╲╱    │
+                  │     ╱╲    │
+                  D ───────── C
+
+TREE topology:         HQ
+                      /    \
+                   R1        R2
+                  / \       / \
+                 N1 N2    N3  N4
+    </pre>
+    <div class="diagram-caption">ASCII representations of common network topologies</div>
+  </div>
+
+  <table>
+    <tr><th>Topology</th><th>Advantages</th><th>Disadvantages</th><th>Use case</th></tr>
+    <tr><td><strong style="color:var(--accent)">Bus</strong></td><td>Simple, cheap, easy to add nodes</td><td>Single point of failure (backbone), collision-prone</td><td>Old Ethernet (10BASE5)</td></tr>
+    <tr><td><strong style="color:var(--accent)">Star</strong></td><td>Easy fault isolation, scalable, no collisions if switch used</td><td>Hub/switch is single point of failure</td><td>Modern Ethernet LANs</td></tr>
+    <tr><td><strong style="color:var(--accent)">Ring</strong></td><td>Equal access (token ring), predictable performance</td><td>Any break disrupts entire network</td><td>Token Ring, FDDI, SONET</td></tr>
+    <tr><td><strong style="color:var(--accent)">Mesh</strong></td><td>Highly fault tolerant, multiple paths</td><td>Expensive — n(n-1)/2 links for full mesh</td><td>Core internet backbone, military</td></tr>
+    <tr><td><strong style="color:var(--accent)">Tree</strong></td><td>Hierarchical, scalable, easy management</td><td>Root/trunk failure is catastrophic</td><td>Corporate networks, ISPs</td></tr>
+    <tr><td><strong style="color:var(--accent)">Hybrid</strong></td><td>Combines advantages of multiple topologies</td><td>Complex design</td><td>Most real-world networks</td></tr>
+  </table>
+
+  <div class="formula">Full Mesh links = n(n-1) / 2 &nbsp;|&nbsp; n = number of nodes</div>
+  <div class="highlight">For 5 nodes in full mesh: 5×4/2 = <strong style="color:var(--accent)">10 links</strong> needed. This is why full mesh is rare — it's expensive at scale.</div>
+
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">In a full-mesh topology with 6 nodes, how many bidirectional links are required?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,false)">A. 12</button>
+      <button class="quiz-opt" onclick="answer(this,false)">B. 20</button>
+      <button class="quiz-opt" onclick="answer(this,true)">C. 15</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. 36</button>
+    </div>
+    <div class="quiz-feedback" id="qf1"></div>
+    <button class="quiz-next" onclick="nextSection(1)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(0)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(2)">Next: OSI & TCP/IP →</button>
+  </div>
+</div>
+
+<!-- 2: OSI & TCP/IP -->
+<div class="section" id="s2">
+  <div class="section-tag">// UNIT 1 · TOPIC 03</div>
+  <div class="section-title">OSI & TCP/IP Models</div>
+  <button class="mark-btn" onclick="markDone(2)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="WHY LAYERS?">
+    <h3>The Layering Concept</h3>
+    <p>Networking is complex. Layering breaks the problem into manageable pieces. Each layer serves the layer above and is served by the layer below. This means you can change how Wi-Fi works without rewriting your email application.</p>
+    <div class="highlight key">🧩 Analogy: Think of shipping a package. You write a letter (application) → put it in an envelope (presentation/session) → address it (network) → hand to postal service (data link) → they load it on a truck (physical). Each "layer" does its job independently.</div>
+  </div>
+
+  <div class="diagram">
+    <pre>
+ OSI MODEL (7 layers)          TCP/IP MODEL (4 layers)
+┌─────────────────────┐       ┌──────────────────────┐
+│  7. APPLICATION     │ ←──── │                      │
+├─────────────────────┤       │   APPLICATION        │
+│  6. PRESENTATION    │ ←──── │  (HTTP, FTP, DNS,    │
+├─────────────────────┤       │   SMTP, Telnet)      │
+│  5. SESSION         │ ←──── │                      │
+├─────────────────────┤       ├──────────────────────┤
+│  4. TRANSPORT       │ ←──── │  TRANSPORT           │
+│  (TCP/UDP)          │       │  (TCP, UDP)          │
+├─────────────────────┤       ├──────────────────────┤
+│  3. NETWORK         │ ←──── │  INTERNET            │
+│  (IP, routing)      │       │  (IP, ICMP, ARP)     │
+├─────────────────────┤       ├──────────────────────┤
+│  2. DATA LINK       │ ←──── │  NETWORK ACCESS      │
+│  (MAC, framing)     │       │  (Ethernet, Wi-Fi,   │
+├─────────────────────┤       │   PPP)               │
+│  1. PHYSICAL        │ ←──── │                      │
+│  (bits, signals)    │       └──────────────────────┘
+└─────────────────────┘
+    </pre>
+    <div class="diagram-caption">OSI vs TCP/IP — both models side by side</div>
+  </div>
+
+  <div class="highlight warn">📚 Mnemonic for OSI layers (top→bottom): <strong style="color:var(--yellow)">All People Seem To Need Data Processing</strong><br>Application → Presentation → Session → Transport → Network → Data Link → Physical</div>
+
+  <table>
+    <tr><th>Layer</th><th>OSI Name</th><th>Function</th><th>Key Protocols/Devices</th></tr>
+    <tr><td>7</td><td>Application</td><td>User-facing services (email, web, file transfer)</td><td>HTTP, FTP, DNS, SMTP, POP3</td></tr>
+    <tr><td>6</td><td>Presentation</td><td>Data format, encryption, compression</td><td>SSL/TLS, JPEG, ASCII, MPEG</td></tr>
+    <tr><td>5</td><td>Session</td><td>Manage sessions (start, maintain, terminate)</td><td>NetBIOS, RPC, PPTP</td></tr>
+    <tr><td>4</td><td>Transport</td><td>End-to-end delivery, error control, flow control</td><td>TCP, UDP — Port numbers</td></tr>
+    <tr><td>3</td><td>Network</td><td>Logical addressing, routing across networks</td><td>IP, ICMP, ARP — Routers</td></tr>
+    <tr><td>2</td><td>Data Link</td><td>Framing, MAC addressing, error detection</td><td>Ethernet, Wi-Fi — Switches</td></tr>
+    <tr><td>1</td><td>Physical</td><td>Bit transmission over medium (voltages, signals)</td><td>Cables, Hubs, NIC</td></tr>
+  </table>
+
+  <div class="concept-box" data-label="ENCAPSULATION">
+    <h3>Data Encapsulation (Super important!)</h3>
+    <p>As data moves <strong style="color:var(--accent)">down</strong> the sending stack, each layer adds its own header (and sometimes trailer). This is called <strong>encapsulation</strong>. The receiver strips headers going back up.</p>
+    <div class="diagram">
+      <pre>
+Application:  [ DATA ]
+Transport:    [ TCP Header | DATA ]  ← called "Segment"
+Network:      [ IP Header | TCP Header | DATA ]  ← called "Packet"
+Data Link:    [ MAC Header | IP Hdr | TCP Hdr | DATA | MAC Trailer ]  ← "Frame"
+Physical:     101001010111000110...  ← "Bits"
+      </pre>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">Which OSI layer is responsible for logical addressing (IP addresses) and routing packets between different networks?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,false)">A. Data Link Layer</button>
+      <button class="quiz-opt" onclick="answer(this,false)">B. Transport Layer</button>
+      <button class="quiz-opt" onclick="answer(this,true)">C. Network Layer</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. Session Layer</button>
+    </div>
+    <div class="quiz-feedback" id="qf2"></div>
+    <button class="quiz-next" onclick="nextSection(2)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(1)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(3)">Next: History →</button>
+  </div>
+</div>
+
+<!-- 3: History & Standards -->
+<div class="section" id="s3">
+  <div class="section-tag">// UNIT 1 · TOPIC 04</div>
+  <div class="section-title">History & Standards</div>
+  <button class="mark-btn" onclick="markDone(3)">✓ Mark as done</button>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">1969</div>
+      <div class="timeline-content">
+        <h4>ARPANET — The First Network</h4>
+        <p>US DoD-funded project. First 4-node network (UCLA, Stanford, UCSB, Utah). First message: "LO" (system crashed after 'G' in LOGIN). This is the grandfather of the Internet.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1973</div>
+      <div class="timeline-content">
+        <h4>Ethernet Invented — Bob Metcalfe (Xerox PARC)</h4>
+        <p>The dominant LAN technology to this day. Originally 10 Mbps over coax; now 100 Gbps over fiber.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1974</div>
+      <div class="timeline-content">
+        <h4>TCP/IP Protocol Suite — Cerf & Kahn</h4>
+        <p>The foundational paper "A Protocol for Packet Network Intercommunication." Cerf is called "Father of the Internet." TCP/IP became the universal language of networking.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1984</div>
+      <div class="timeline-content">
+        <h4>OSI Model Published — ISO</h4>
+        <p>The Open Systems Interconnection reference model. Designed to standardize networking across vendors. Widely taught but TCP/IP won in practice.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1991</div>
+      <div class="timeline-content">
+        <h4>World Wide Web — Tim Berners-Lee (CERN)</h4>
+        <p>HTTP and HTML brought the Internet to the masses. The Web ≠ Internet. The Internet is the infrastructure; the Web is an application on it.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">1999</div>
+      <div class="timeline-content">
+        <h4>IEEE 802.11b Wi-Fi (11 Mbps)</h4>
+        <p>Wireless networking goes mainstream. Now we have 802.11ax (Wi-Fi 6) supporting multi-gigabit speeds.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="STANDARDS BODIES">
+    <h3>Key Standards Organizations</h3>
+    <table>
+      <tr><th>Organization</th><th>Stands for</th><th>What they standardize</th></tr>
+      <tr><td>IEEE</td><td>Institute of Electrical and Electronics Engineers</td><td>802.x standards (Ethernet, Wi-Fi, Bluetooth)</td></tr>
+      <tr><td>IETF</td><td>Internet Engineering Task Force</td><td>Internet protocols via RFCs (TCP, IP, HTTP, DNS)</td></tr>
+      <tr><td>ISO</td><td>International Organization for Standardization</td><td>OSI model, international standards</td></tr>
+      <tr><td>ITU-T</td><td>International Telecommunication Union</td><td>Telecom standards (G.xxx, V.xxx series)</td></tr>
+      <tr><td>ANSI</td><td>American National Standards Institute</td><td>US national standards including FDDI</td></tr>
+    </table>
+    <div class="highlight">💡 RFCs (Request for Comments) are the documents that define Internet standards. RFC 791 = IP, RFC 793 = TCP, RFC 2616 = HTTP/1.1.</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(2)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(4)">Next: Data & Signals →</button>
+  </div>
+</div>
+
+<!-- 4: Data & Signals -->
+<div class="section" id="s4">
+  <div class="section-tag">// UNIT 1 · TOPIC 05</div>
+  <div class="section-title">Data & Signals</div>
+  <button class="mark-btn" onclick="markDone(4)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="CORE CONCEPT">
+    <h3>Data vs. Signals</h3>
+    <p><strong style="color:var(--accent)">Data</strong> is the information we want to communicate (text, images, voice). <strong style="color:var(--accent2)">Signals</strong> are the physical representation used to transmit data (electromagnetic waves).</p>
+    <p>Data can be <em>analog</em> (continuous — human voice) or <em>digital</em> (discrete — binary 0s and 1s). Signals can also be analog or digital.</p>
+  </div>
+
+  <div class="compare-grid cols-2">
+    <div class="compare-card">
+      <h4>📈 Analog Signal</h4>
+      <ul>
+        <li>Continuous waveform (sine wave)</li>
+        <li>Characterized by: Amplitude, Frequency, Phase</li>
+        <li>Can take infinite values</li>
+        <li>Degrades with noise (hard to recover)</li>
+        <li>e.g., AM/FM radio, old telephone lines</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>⬛ Digital Signal</h4>
+      <ul>
+        <li>Discrete pulses (square wave)</li>
+        <li>Characterized by: Bit rate, Bit interval</li>
+        <li>Only two values: 0 or 1</li>
+        <li>Easier to regenerate (repeaters)</li>
+        <li>e.g., Ethernet, USB, modern networks</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="KEY TERMS">
+    <h3>Critical Signal Properties</h3>
+    <table>
+      <tr><th>Term</th><th>Definition</th><th>Unit</th></tr>
+      <tr><td><strong>Amplitude</strong></td><td>Height/strength of the wave (signal power)</td><td>Volts</td></tr>
+      <tr><td><strong>Frequency</strong></td><td>Number of cycles per second</td><td>Hz (Hertz)</td></tr>
+      <tr><td><strong>Period</strong></td><td>Time for one complete cycle (T = 1/f)</td><td>Seconds</td></tr>
+      <tr><td><strong>Phase</strong></td><td>Position of wave relative to a reference time</td><td>Degrees/Radians</td></tr>
+      <tr><td><strong>Wavelength</strong></td><td>Distance covered by one cycle (λ = c/f)</td><td>Meters</td></tr>
+      <tr><td><strong>Bandwidth</strong></td><td>Range of frequencies in a signal</td><td>Hz</td></tr>
+      <tr><td><strong>Bit Rate</strong></td><td>Number of bits transmitted per second</td><td>bps</td></tr>
+    </table>
+  </div>
+
+  <div class="concept-box" data-label="NYQUIST & SHANNON">
+    <h3>Theoretical Limits — Nyquist & Shannon</h3>
+    <div class="highlight key">These two theorems are EXAM FAVORITES. Know them cold.</div>
+    <p><strong style="color:var(--accent)">Nyquist Theorem</strong> — For a noiseless channel:</p>
+    <div class="formula">Max Bit Rate = 2 × B × log₂(L) &nbsp;bps</div>
+    <p style="color:var(--muted);font-size:12px;margin:8px 0 16px">Where B = bandwidth (Hz), L = number of signal levels</p>
+
+    <p><strong style="color:var(--accent)">Shannon's Capacity Theorem</strong> — For a noisy channel:</p>
+    <div class="formula">Max Capacity = B × log₂(1 + SNR) &nbsp;bps</div>
+    <p style="color:var(--muted);font-size:12px;margin:8px 0">Where SNR = Signal-to-Noise Ratio (often given in dB)</p>
+    <div class="highlight warn">⚠️ Shannon gives the THEORETICAL MAXIMUM. Nyquist gives the limit based on signal levels. Real systems are always below Shannon capacity.</div>
+  </div>
+
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">A noiseless channel has a bandwidth of 3000 Hz and uses 8 signal levels. What is the maximum bit rate according to Nyquist?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,false)">A. 6000 bps</button>
+      <button class="quiz-opt" onclick="answer(this,false)">B. 9000 bps</button>
+      <button class="quiz-opt" onclick="answer(this,true)">C. 18000 bps</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. 24000 bps</button>
+    </div>
+    <div class="quiz-feedback" id="qf4"></div>
+    <button class="quiz-next" onclick="nextSection(4)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(3)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(5)">Next: Digital Transmission →</button>
+  </div>
+</div>
+
+<!-- 5: Digital Transmission -->
+<div class="section" id="s5">
+  <div class="section-tag">// UNIT 1 · TOPIC 06</div>
+  <div class="section-title">Digital Transmission</div>
+  <button class="mark-btn" onclick="markDone(5)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="LINE CODING">
+    <h3>Line Coding — Converting Bits to Signals</h3>
+    <p>Line coding converts digital data (bits) into a digital signal for transmission. Different schemes offer trade-offs in bandwidth, synchronization, and DC component.</p>
+    <div class="diagram">
+      <pre>
+Data bits:   1   0   1   1   0   0   1
+
+NRZ-L:      ─┐  ┌─┐  ┌─┐     ┌─
+(High=1)     └──┘ └──┘ └─────┘
+
+Manchester: ┐ ┌┘ ┐ ┌┐ ┌┘   ┐ ┌
+(0→1 = 1)   └─┘  └─┘└─┘   └─┘
+
+NRZ-I:      ─┘  └─┘  └──────┘  ┌
+(Invert=1)
+      </pre>
+      <div class="diagram-caption">Three common line coding schemes</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Scheme</th><th>Description</th><th>Clock Sync</th><th>Used in</th></tr>
+    <tr><td>NRZ-L</td><td>High voltage = 1, Low = 0. Simple but no sync.</td><td>Poor</td><td>RS-232</td></tr>
+    <tr><td>NRZ-I</td><td>Invert on 1, no change on 0.</td><td>Better</td><td>USB</td></tr>
+    <tr><td>Manchester</td><td>Mid-bit transition: Low→High = 1, High→Low = 0</td><td>Excellent</td><td>10BASE-T Ethernet</td></tr>
+    <tr><td>Differential Manchester</td><td>Transition at start = 0; no transition = 1</td><td>Excellent</td><td>Token Ring</td></tr>
+    <tr><td>4B/5B</td><td>Map 4 data bits to 5-bit code; eliminates long strings of 0s</td><td>Good</td><td>Fast Ethernet (100BASE-TX)</td></tr>
+    <tr><td>AMI (Bipolar)</td><td>0 = zero voltage; 1 alternates +/-. No DC component.</td><td>Moderate</td><td>T1/E1 lines</td></tr>
+  </table>
+
+  <div class="concept-box" data-label="BLOCK CODING">
+    <h3>Block Coding</h3>
+    <p>Used to improve data integrity. Divides data into m-bit groups, maps each to an n-bit codeword (where n &gt; m), then applies line coding. Written as <strong style="color:var(--accent)">mB/nB</strong>.</p>
+    <div class="highlight">Example: 4B/5B — every 4-bit block maps to a 5-bit code. The extra bit ensures no codeword has more than one leading zero and no more than two trailing zeros, enabling clock recovery.</div>
+  </div>
+
+  <div class="concept-box" data-label="SAMPLING">
+    <h3>Converting Analog to Digital (PCM)</h3>
+    <p><strong style="color:var(--accent)">Pulse Code Modulation (PCM)</strong> converts analog signals to digital in 3 steps:</p>
+    <div class="compare-grid cols-3">
+      <div class="compare-card">
+        <h4>1. Sampling</h4>
+        <ul><li>Sample the analog signal at regular intervals</li><li>Nyquist: sample at ≥ 2×max frequency</li><li>Voice: 4000 Hz → 8000 samples/sec</li></ul>
+      </div>
+      <div class="compare-card">
+        <h4>2. Quantization</h4>
+        <ul><li>Round each sample to nearest level</li><li>256 levels = 8 bits per sample</li><li>Introduces quantization noise</li></ul>
+      </div>
+      <div class="compare-card">
+        <h4>3. Encoding</h4>
+        <ul><li>Represent each level as binary</li><li>Telephone: 8 bits × 8000 samples = 64 Kbps</li><li>CD audio: 44,100 Hz, 16 bits → 1.4 Mbps</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(4)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(6)">Next: Analog Transmission →</button>
+  </div>
+</div>
+
+<!-- 6: Analog Transmission -->
+<div class="section" id="s6">
+  <div class="section-tag">// UNIT 1 · TOPIC 07</div>
+  <div class="section-title">Analog Transmission & Modulation</div>
+  <button class="mark-btn" onclick="markDone(6)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="WHY MODULATION?">
+    <h3>Why Do We Modulate?</h3>
+    <p>Digital data must sometimes be sent over analog channels (e.g., old phone lines, radio). <strong style="color:var(--accent)">Modulation</strong> maps digital bits onto a carrier analog wave by varying one of its properties.</p>
+  </div>
+
+  <div class="compare-grid cols-3">
+    <div class="compare-card">
+      <h4>ASK — Amplitude Shift Keying</h4>
+      <ul>
+        <li>Change amplitude to represent bits</li>
+        <li>0 = low amplitude, 1 = high amplitude</li>
+        <li>Simple but susceptible to noise</li>
+        <li>Used in optical fiber (on/off)</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>FSK — Frequency Shift Keying</h4>
+      <ul>
+        <li>Change frequency to represent bits</li>
+        <li>0 = low freq, 1 = high freq</li>
+        <li>Less noise-sensitive than ASK</li>
+        <li>Used in old modems, garage door openers</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>PSK — Phase Shift Keying</h4>
+      <ul>
+        <li>Change phase to represent bits</li>
+        <li>BPSK: 2 phases (0°, 180°)</li>
+        <li>QPSK: 4 phases → 2 bits/symbol</li>
+        <li>Used in Wi-Fi, satellite, LTE</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="QAM">
+    <h3>QAM — Quadrature Amplitude Modulation</h3>
+    <p>Combines ASK + PSK. Varies <em>both</em> amplitude and phase. This allows more bits per symbol — very bandwidth efficient.</p>
+    <div class="highlight key">64-QAM: 6 bits per symbol (2⁶ = 64 combinations). 256-QAM: 8 bits per symbol. Used in cable modems, Wi-Fi 6, 4G/5G.</div>
+    <div class="formula">Bits per symbol = log₂(M) &nbsp;where M = number of distinct signal states</div>
+  </div>
+
+  <div class="concept-box" data-label="ANALOG → ANALOG">
+    <h3>Analog-to-Analog Modulation</h3>
+    <p>For transmitting analog data over analog channels (e.g., radio broadcasting):</p>
+    <table>
+      <tr><th>Type</th><th>What varies</th><th>Bandwidth</th><th>Use</th></tr>
+      <tr><td>AM (Amplitude Modulation)</td><td>Amplitude of carrier</td><td>2 × signal bandwidth</td><td>AM radio (535-1605 kHz)</td></tr>
+      <tr><td>FM (Frequency Modulation)</td><td>Frequency of carrier</td><td>8 × signal bandwidth</td><td>FM radio (88-108 MHz)</td></tr>
+      <tr><td>PM (Phase Modulation)</td><td>Phase of carrier</td><td>Similar to FM</td><td>Data modems</td></tr>
+    </table>
+    <div class="highlight">FM has better quality than AM because amplitude variations (noise) don't distort the signal — the data is in the frequency, not amplitude.</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(5)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(7)">Next: Multiplexing →</button>
+  </div>
+</div>
+
+<!-- 7: Multiplexing -->
+<div class="section" id="s7">
+  <div class="section-tag">// UNIT 1 · TOPIC 08</div>
+  <div class="section-title">Bandwidth Utilization & Multiplexing</div>
+  <button class="mark-btn" onclick="markDone(7)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="CONCEPT">
+    <h3>What is Multiplexing?</h3>
+    <p><strong style="color:var(--accent)">Multiplexing</strong> allows multiple signals to share a single transmission medium simultaneously. A <strong>MUX</strong> combines signals at the sender; a <strong>DEMUX</strong> separates them at the receiver.</p>
+    <div class="highlight key">💡 Analogy: A highway with multiple lanes. Multiple cars (signals) travel simultaneously without collision because they use different lanes (channels). Multiplexing = managing these lanes.</div>
+  </div>
+
+  <div class="diagram">
+    <pre>
+       ┌─────┐           ┌───────┐           ┌──────┐
+  A ──▶│     │           │       │           │      │▶── A
+  B ──▶│ MUX │══════════▶│ LINK  │══════════▶│ DEMUX│▶── B
+  C ──▶│     │           │       │           │      │▶── C
+       └─────┘           └───────┘           └──────┘
+      (combine)    (single shared medium)    (separate)
+    </pre>
+    <div class="diagram-caption">Basic multiplexing concept</div>
+  </div>
+
+  <table>
+    <tr><th>Type</th><th>How it divides the channel</th><th>Used for</th><th>Example</th></tr>
+    <tr><td><strong style="color:var(--accent)">FDM</strong><br>Frequency Division</td><td>Each signal gets a unique frequency band. All transmit simultaneously.</td><td>Analog signals, broadband</td><td>FM/AM radio, cable TV, ADSL</td></tr>
+    <tr><td><strong style="color:var(--accent)">TDM</strong><br>Time Division</td><td>Each signal gets a dedicated time slot in a repeating frame. Synchronous.</td><td>Digital signals, telephone</td><td>T1/E1 lines, SONET</td></tr>
+    <tr><td><strong style="color:var(--accent)">STDM</strong><br>Statistical TDM</td><td>Like TDM but slots allocated on demand — no fixed assignment.</td><td>Variable traffic</td><td>Internet packet transmission</td></tr>
+    <tr><td><strong style="color:var(--accent)">WDM</strong><br>Wavelength Division</td><td>Each signal uses a different wavelength of light. FDM for optical fiber.</td><td>Fiber optic, high capacity</td><td>DWDM (Dense WDM) — 100s of channels</td></tr>
+    <tr><td><strong style="color:var(--accent)">CDM</strong><br>Code Division</td><td>Each signal uses a unique code. All share same freq/time simultaneously.</td><td>Wireless, cellular</td><td>CDMA (3G), GPS</td></tr>
+  </table>
+
+  <div class="concept-box" data-label="TDM FRAME STRUCTURE">
+    <h3>TDM Frame Example</h3>
+    <div class="diagram">
+      <pre>
+Frame 1:  [A₁][B₁][C₁][D₁]
+Frame 2:  [A₂][B₂][C₂][D₂]
+Frame 3:  [A₃][B₃][C₃][D₃]
+           ↑ Time slots repeat in round-robin fashion
+
+T1 line: 24 channels × 8 bits/sample × 8000 frames/sec = 1.544 Mbps
+E1 line: 32 channels × 8 bits × 8000 = 2.048 Mbps
+      </pre>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">A TV cable operator transmitting many channels simultaneously over a single coaxial cable, with each channel on a different frequency band, is using:</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,true)">A. FDM (Frequency Division Multiplexing)</button>
+      <button class="quiz-opt" onclick="answer(this,false)">B. TDM (Time Division Multiplexing)</button>
+      <button class="quiz-opt" onclick="answer(this,false)">C. WDM (Wavelength Division Multiplexing)</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. CDM (Code Division Multiplexing)</button>
+    </div>
+    <div class="quiz-feedback" id="qf7"></div>
+    <button class="quiz-next" onclick="nextSection(7)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(6)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(8)">Next: Transmission Media →</button>
+  </div>
+</div>
+
+<!-- 8: Transmission Media -->
+<div class="section" id="s8">
+  <div class="section-tag">// UNIT 1 · TOPIC 09</div>
+  <div class="section-title">Transmission Media</div>
+  <button class="mark-btn" onclick="markDone(8)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="GUIDED MEDIA">
+    <h3>Guided (Wired) Media</h3>
+    <p>Physical cables that guide electromagnetic signals from source to destination.</p>
+  </div>
+
+  <table>
+    <tr><th>Medium</th><th>Construction</th><th>Speed</th><th>Max Distance</th><th>Interference</th><th>Cost</th></tr>
+    <tr><td><strong>Twisted Pair (UTP)</strong></td><td>4 pairs of copper wires, twisted to reduce EMI</td><td>Up to 10 Gbps</td><td>100m (Cat 6a)</td><td>High susceptibility</td><td>Cheapest</td></tr>
+    <tr><td><strong>Coaxial Cable</strong></td><td>Central copper + shielding braid</td><td>Up to 10 Gbps</td><td>500m (10BASE5)</td><td>Better shielding</td><td>Medium</td></tr>
+    <tr><td><strong>Fiber Optic</strong></td><td>Glass/plastic core; light pulses</td><td>Up to 100 Tbps</td><td>100s of km</td><td>Immune to EMI</td><td>Highest</td></tr>
+  </table>
+
+  <div class="compare-grid cols-2">
+    <div class="compare-card">
+      <h4>Fiber: Single-mode vs Multi-mode</h4>
+      <ul>
+        <li><strong>Single-mode:</strong> Thin core (~9 μm), one light path, long distance (100+ km), used for long-haul backbone</li>
+        <li><strong>Multi-mode:</strong> Wider core (~50-62.5 μm), multiple paths → dispersion, shorter range (2 km), used inside buildings</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>UTP Categories</h4>
+      <ul>
+        <li>Cat 3: 10 Mbps (old phone lines)</li>
+        <li>Cat 5e: 1 Gbps (common)</li>
+        <li>Cat 6: 10 Gbps up to 55m</li>
+        <li>Cat 6a: 10 Gbps up to 100m</li>
+        <li>Cat 8: 40 Gbps (data centers)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="UNGUIDED MEDIA">
+    <h3>Unguided (Wireless) Media</h3>
+    <table>
+      <tr><th>Type</th><th>Frequency</th><th>Range</th><th>Penetration</th><th>Use</th></tr>
+      <tr><td>Radio waves</td><td>3 KHz – 1 GHz</td><td>Km range</td><td>Good (through walls)</td><td>AM/FM radio, TV</td></tr>
+      <tr><td>Microwaves</td><td>1 GHz – 300 GHz</td><td>Line of sight</td><td>Poor</td><td>Cellular, satellite, Wi-Fi</td></tr>
+      <tr><td>Infrared</td><td>300 GHz – 400 THz</td><td>Very short (meters)</td><td>Cannot penetrate walls</td><td>TV remotes, IrDA</td></tr>
+      <tr><td>Light (FSO)</td><td>400–700 THz</td><td>Short (km outdoors)</td><td>None (line of sight)</td><td>High-speed point-to-point</td></tr>
+    </table>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(7)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(9)">Next: Switching →</button>
+  </div>
+</div>
+
+<!-- 9: Switching -->
+<div class="section" id="s9">
+  <div class="section-tag">// UNIT 1 · TOPIC 10</div>
+  <div class="section-title">Switching Techniques</div>
+  <button class="mark-btn" onclick="markDone(9)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="CONCEPT">
+    <h3>Why Switching?</h3>
+    <p>In a network with many devices, we can't have direct links between every pair (too expensive, mesh problem). <strong style="color:var(--accent)">Switching</strong> lets us route data through intermediate nodes on a shared infrastructure.</p>
+  </div>
+
+  <div class="compare-grid cols-3">
+    <div class="compare-card">
+      <h4>📞 Circuit Switching</h4>
+      <ul>
+        <li>Dedicated path established BEFORE data transfer</li>
+        <li>Path reserved for entire duration</li>
+        <li>Three phases: Setup → Transfer → Teardown</li>
+        <li>Guaranteed bandwidth</li>
+        <li>Wasteful if idle (resources locked)</li>
+        <li>e.g., Traditional telephone (PSTN)</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>📬 Message Switching</h4>
+      <ul>
+        <li>Entire message stored at each node</li>
+        <li>"Store-and-forward" switching</li>
+        <li>No dedicated path</li>
+        <li>Messages can be queued (delayed)</li>
+        <li>Better utilization than circuit</li>
+        <li>e.g., Email (conceptually), telegrams</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>📦 Packet Switching</h4>
+      <ul>
+        <li>Message split into fixed-size packets</li>
+        <li>Each packet routed independently</li>
+        <li>Packets may arrive out of order</li>
+        <li>Excellent link utilization</li>
+        <li>Internet standard</li>
+        <li>e.g., Internet (IP), ATM</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <pre>
+CIRCUIT SWITCHING:
+A ────────────────────────────────── B
+    [Setup][====DATA FLOWS====][End]
+    (path reserved, no sharing)
+
+MESSAGE SWITCHING:
+A → Node1 → Node2 → Node3 → B
+    [store] [store] [store]
+    (whole message hops, may delay)
+
+PACKET SWITCHING (Datagram):
+Packet 1: A → N1 → N3 → B
+Packet 2: A → N1 → N2 → N4 → B  ← different path!
+Packet 3: A → N3 → B
+          (each packet routed independently)
+    </pre>
+    <div class="diagram-caption">The three switching paradigms compared</div>
+  </div>
+
+  <table>
+    <tr><th>Feature</th><th>Circuit</th><th>Message</th><th>Packet</th></tr>
+    <tr><td>Setup required</td><td>Yes</td><td>No</td><td>No</td></tr>
+    <tr><td>Dedicated path</td><td>Yes</td><td>No</td><td>No</td></tr>
+    <tr><td>Store-and-forward</td><td>No</td><td>Yes (full msg)</td><td>Yes (per packet)</td></tr>
+    <tr><td>Bandwidth efficiency</td><td>Poor (reserved)</td><td>Better</td><td>Best</td></tr>
+    <tr><td>Delay</td><td>Low (once set up)</td><td>High</td><td>Variable</td></tr>
+    <tr><td>Ordering guaranteed</td><td>Yes</td><td>Yes</td><td>No (datagrams)</td></tr>
+    <tr><td>Real-time suitability</td><td>Excellent</td><td>Poor</td><td>Good (with QoS)</td></tr>
+  </table>
+
+  <div class="highlight key">💡 Packet switching has two sub-types: <strong>Datagram</strong> (each packet routed independently, no guaranteed order — like the Internet) and <strong>Virtual Circuit</strong> (path established first, packets follow same path — like ATM, MPLS).</div>
+
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">The traditional telephone network (PSTN) uses which switching technique?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,true)">A. Circuit Switching</button>
+      <button class="quiz-opt" onclick="answer(this,false)">B. Packet Switching</button>
+      <button class="quiz-opt" onclick="answer(this,false)">C. Message Switching</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. Virtual Circuit Switching</button>
+    </div>
+    <div class="quiz-feedback" id="qf9"></div>
+    <button class="quiz-next" onclick="nextSection(9)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(8)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(10)">Next: Unit 2 — Data Link →</button>
+  </div>
+</div>
+
+<!-- 10: Data Link Layer Wired -->
+<div class="section" id="s10">
+  <div class="section-tag">// UNIT 2 · TOPIC 01</div>
+  <div class="section-title">Data Link Layer — Wired</div>
+  <button class="mark-btn" onclick="markDone(10)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="DLL OVERVIEW">
+    <h3>What Does the Data Link Layer Do?</h3>
+    <p>The DLL is responsible for <strong style="color:var(--accent)">node-to-node delivery</strong> — getting a frame from one hop to the next. It sits between the Physical Layer (raw bits) and the Network Layer (IP packets). It has two sub-layers:</p>
+    <div class="compare-grid cols-2">
+      <div class="compare-card">
+        <h4>LLC — Logical Link Control</h4>
+        <ul>
+          <li>Upper sub-layer</li>
+          <li>Error control and flow control</li>
+          <li>Multiplexing of higher-layer protocols</li>
+          <li>IEEE 802.2</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>MAC — Medium Access Control</h4>
+        <ul>
+          <li>Lower sub-layer</li>
+          <li>Controls who sends on shared medium</li>
+          <li>MAC addresses (48-bit hardware address)</li>
+          <li>Framing, error detection</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="DLC SERVICES">
+    <h3>Key DLL Functions</h3>
+    <table>
+      <tr><th>Function</th><th>Description</th></tr>
+      <tr><td><strong>Framing</strong></td><td>Divide bitstream into discrete frames with header/trailer for delineation</td></tr>
+      <tr><td><strong>Error Detection</strong></td><td>Detect corrupted frames using CRC, checksum, parity</td></tr>
+      <tr><td><strong>Error Correction</strong></td><td>Retransmit or correct errors (ARQ protocols)</td></tr>
+      <tr><td><strong>Flow Control</strong></td><td>Prevent fast sender from overwhelming slow receiver</td></tr>
+      <tr><td><strong>MAC</strong></td><td>Manage access to shared medium — avoid collisions</td></tr>
+    </table>
+  </div>
+
+  <div class="concept-box" data-label="ERROR DETECTION">
+    <h3>Error Detection Methods</h3>
+    <div class="compare-grid cols-3">
+      <div class="compare-card">
+        <h4>Parity Check</h4>
+        <ul><li>Add 1 bit so total 1s is even (even parity) or odd</li><li>Detects single bit errors</li><li>Can't detect 2-bit errors</li><li>Very simple, low overhead</li></ul>
+      </div>
+      <div class="compare-card">
+        <h4>CRC</h4>
+        <ul><li>Cyclic Redundancy Check</li><li>Polynomial division of data</li><li>Append remainder as FCS</li><li>Very powerful — detects all burst errors &lt; degree of polynomial</li><li>Used in Ethernet, Wi-Fi</li></ul>
+      </div>
+      <div class="compare-card">
+        <h4>Checksum</h4>
+        <ul><li>Sum of all data segments</li><li>Send 1's complement of sum</li><li>Receiver: sum all + check = all 1s?</li><li>Used in IP, TCP, UDP headers</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight warn">⚠️ Error detection only DETECTS errors. Error CORRECTION requires either retransmission (ARQ) or forward error correction (FEC) using Hamming codes or similar.</div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(9)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(11)">Next: Multiple Access Protocols →</button>
+  </div>
+</div>
+
+<!-- 11: Multiple Access -->
+<div class="section" id="s11">
+  <div class="section-tag">// UNIT 2 · TOPIC 02</div>
+  <div class="section-title">Multiple Access Protocols</div>
+  <button class="mark-btn" onclick="markDone(11)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="PROBLEM">
+    <h3>The Problem: Shared Medium</h3>
+    <p>When multiple devices share the same transmission medium (like a bus or Wi-Fi), collisions happen when two nodes transmit simultaneously. <strong style="color:var(--accent)">Multiple Access Protocols</strong> coordinate access to avoid or recover from collisions.</p>
+  </div>
+
+  <div class="concept-box" data-label="CATEGORIES">
+    <h3>Three Categories</h3>
+    <div class="compare-grid cols-3">
+      <div class="compare-card">
+        <h4>🎲 Random Access</h4>
+        <ul><li>No central control</li><li>Any node can transmit anytime</li><li>Collisions possible — handled by protocol</li><li>Examples: ALOHA, CSMA, CSMA/CD, CSMA/CA</li></ul>
+      </div>
+      <div class="compare-card">
+        <h4>🎫 Controlled Access</h4>
+        <ul><li>Nodes coordinate before transmitting</li><li>No collisions</li><li>Examples: Polling (master/slave), Token Passing, Reservation</li></ul>
+      </div>
+      <div class="compare-card">
+        <h4>✂️ Channelization</h4>
+        <ul><li>Divide channel into sub-channels</li><li>No collisions (separate channels)</li><li>Examples: FDMA, TDMA, CDMA</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="RANDOM ACCESS DEEP DIVE">
+    <h3>ALOHA → CSMA/CD Evolution</h3>
+    <table>
+      <tr><th>Protocol</th><th>How it works</th><th>Efficiency</th></tr>
+      <tr><td>Pure ALOHA</td><td>Send anytime. Collision? Wait random time, resend.</td><td>Max 18.4%</td></tr>
+      <tr><td>Slotted ALOHA</td><td>Send only at start of time slots. Less collision window.</td><td>Max 36.8%</td></tr>
+      <tr><td>CSMA (1-persistent)</td><td>Sense medium first. If idle, send immediately. Collision still possible.</td><td>Better</td></tr>
+      <tr><td>CSMA/CD</td><td>Sense + transmit. If collision DETECTED during transmission, stop, jam, backoff (Ethernet). Wired only.</td><td>High</td></tr>
+      <tr><td>CSMA/CA</td><td>Sense + wait random backoff even if idle (avoid collision). Used in Wi-Fi (can't detect collision wirelessly).</td><td>Good</td></tr>
+    </table>
+  </div>
+
+  <div class="concept-box" data-label="CSMA/CD">
+    <h3>CSMA/CD — Binary Exponential Backoff</h3>
+    <p>After collision k: wait random slots in range [0, 2ᵏ - 1]. After 16 collisions, give up.</p>
+    <div class="diagram">
+      <pre>
+1st collision:  wait 0 or 1 slots      (range: 0 to 1)
+2nd collision:  wait 0,1,2, or 3       (range: 0 to 3)
+3rd collision:  wait 0 to 7            (range: 0 to 7)
+kth collision:  wait 0 to 2ᵏ-1 slots
+Max k = 10, then range stays at 0-1023
+After 16 failures → abort, report error
+      </pre>
+    </div>
+    <div class="highlight">Minimum frame size in Ethernet = 64 bytes. This ensures a collision can be detected before transmission ends. If frame is shorter, collision may go undetected.</div>
+  </div>
+
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">Why does Wi-Fi use CSMA/CA instead of CSMA/CD?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,false)">A. Wi-Fi is faster, so collisions don't matter</button>
+      <button class="quiz-opt" onclick="answer(this,false)">B. Wi-Fi uses token ring which doesn't need collision detection</button>
+      <button class="quiz-opt" onclick="answer(this,true)">C. Wireless nodes cannot detect collisions while transmitting (hidden node problem)</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. CSMA/CD is patented and can't be used in Wi-Fi</button>
+    </div>
+    <div class="quiz-feedback" id="qf11"></div>
+    <button class="quiz-next" onclick="nextSection(11)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(10)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(12)">Next: Ethernet →</button>
+  </div>
+</div>
+
+<!-- 12: Ethernet -->
+<div class="section" id="s12">
+  <div class="section-tag">// UNIT 2 · TOPIC 03</div>
+  <div class="section-title">Wired LANs — Ethernet</div>
+  <button class="mark-btn" onclick="markDone(12)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="ETHERNET">
+    <h3>Ethernet — The Dominant LAN Standard (IEEE 802.3)</h3>
+    <p>Ethernet is the most widely deployed LAN technology. Originally a broadcast bus using CSMA/CD, modern Ethernet uses switches and full-duplex links (no CSMA/CD needed).</p>
+  </div>
+
+  <div class="concept-box" data-label="FRAME FORMAT">
+    <h3>Ethernet Frame Structure</h3>
+    <div class="diagram">
+      <pre>
+┌──────────┬─────────┬──────────┬────────┬──────────────────────┬─────┐
+│ Preamble │   SFD   │ Dest MAC │Src MAC │   Type/Length        │ FCS │
+│  7 bytes │ 1 byte  │ 6 bytes  │ 6 bytes│    2 bytes           │ 4 B │
+└──────────┴─────────┴──────────┴────────┴──────────────────────┴─────┘
+                                          ┌────────────────────────────┐
+                                          │      DATA + Padding        │
+                                          │    46 to 1500 bytes        │
+                                          └────────────────────────────┘
+Total: 64 bytes (min) to 1518 bytes (max)
+Preamble: 10101010... pattern for clock sync
+SFD: Start Frame Delimiter (10101011) — marks start of frame
+FCS: Frame Check Sequence — 32-bit CRC
+      </pre>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="STANDARDS EVOLUTION">
+    <h3>Ethernet Standards — Speed Evolution</h3>
+    <table>
+      <tr><th>Standard</th><th>Speed</th><th>Medium</th><th>Max Distance</th><th>Name</th></tr>
+      <tr><td>10BASE5</td><td>10 Mbps</td><td>Thick coax</td><td>500m</td><td>Thicknet</td></tr>
+      <tr><td>10BASE-T</td><td>10 Mbps</td><td>Cat 3 UTP</td><td>100m</td><td>Legacy Ethernet</td></tr>
+      <tr><td>100BASE-TX</td><td>100 Mbps</td><td>Cat 5 UTP</td><td>100m</td><td>Fast Ethernet</td></tr>
+      <tr><td>1000BASE-T</td><td>1 Gbps</td><td>Cat 5e UTP</td><td>100m</td><td>Gigabit Ethernet</td></tr>
+      <tr><td>10GBASE-T</td><td>10 Gbps</td><td>Cat 6a UTP</td><td>100m</td><td>10G Ethernet</td></tr>
+      <tr><td>100GBASE-SR4</td><td>100 Gbps</td><td>Fiber</td><td>100m</td><td>Data center backbone</td></tr>
+    </table>
+    <div class="highlight">Naming convention: <strong style="color:var(--accent)">XBase-Y</strong> = X is speed in Mbps, "Base" = baseband, Y = medium/variant. 100BASE-TX = 100 Mbps, baseband, twisted pair.</div>
+  </div>
+
+  <div class="concept-box" data-label="SWITCHING">
+    <h3>Hubs vs. Switches vs. Bridges</h3>
+    <table>
+      <tr><th>Device</th><th>Layer</th><th>Intelligence</th><th>Collision Domain</th><th>Broadcast Domain</th></tr>
+      <tr><td>Hub</td><td>Layer 1</td><td>None (repeater)</td><td>One per hub</td><td>One per hub</td></tr>
+      <tr><td>Bridge</td><td>Layer 2</td><td>MAC address table</td><td>Separate per port</td><td>One per bridge</td></tr>
+      <tr><td>Switch</td><td>Layer 2</td><td>MAC address table, full-duplex</td><td>One per port (no collisions!)</td><td>One per switch</td></tr>
+      <tr><td>Router</td><td>Layer 3</td><td>Routing table (IP)</td><td>Separate per interface</td><td>Separate per interface</td></tr>
+    </table>
+    <div class="highlight key">💡 Modern switched Ethernet: each device gets its own port → full duplex → no collisions → CSMA/CD is effectively obsolete in practice. Speed increased dramatically.</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(11)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(13)">Next: Wireless DLL →</button>
+  </div>
+</div>
+
+<!-- 13: Wireless DLL -->
+<div class="section" id="s13">
+  <div class="section-tag">// UNIT 2 · TOPIC 04</div>
+  <div class="section-title">Data Link Layer — Wireless</div>
+  <button class="mark-btn" onclick="markDone(13)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="WIRELESS CHALLENGES">
+    <h3>Why Wireless is Harder</h3>
+    <div class="compare-grid cols-2">
+      <div class="compare-card">
+        <h4>Hidden Node Problem</h4>
+        <ul>
+          <li>Node A and C both in range of B, but not each other</li>
+          <li>A can't hear C, so A doesn't know C is transmitting</li>
+          <li>Both transmit to B → collision at B</li>
+          <li>Solution: RTS/CTS handshake (Request to Send / Clear to Send)</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>Exposed Node Problem</h4>
+        <ul>
+          <li>Node B transmits to A. C hears B and thinks medium is busy.</li>
+          <li>C wants to transmit to D (out of A's range) — this would be fine!</li>
+          <li>C unnecessarily waits → wasted capacity</li>
+          <li>More complex to solve</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="CSMA/CA DETAILED">
+    <h3>IEEE 802.11 CSMA/CA Protocol</h3>
+    <div class="diagram">
+      <pre>
+Sender wants to transmit:
+  1. Sense medium — busy? Wait until idle
+  2. Wait for DIFS (Distributed Inter-Frame Space) 
+  3. Pick random backoff counter (in contention window)
+  4. Countdown during idle periods, pause when medium busy
+  5. When counter = 0: send RTS (Request to Send)
+  6. Receiver sends CTS (Clear to Send) after SIFS
+  7. Sender transmits data frame
+  8. Receiver sends ACK after SIFS
+  
+  DIFS: longer wait (before competing)
+  SIFS: shorter wait (for ACK/CTS — high priority)
+      </pre>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(12)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(14)">Next: 802.11, Bluetooth, WiMAX →</button>
+  </div>
+</div>
+
+<!-- 14: 802.11, BT, WiMAX -->
+<div class="section" id="s14">
+  <div class="section-tag">// UNIT 2 · TOPIC 05</div>
+  <div class="section-title">IEEE 802.11 · Bluetooth · WiMAX</div>
+  <button class="mark-btn" onclick="markDone(14)">✓ Mark as done</button>
+
+  <table>
+    <tr><th>Standard</th><th>Wi-Fi Name</th><th>Max Speed</th><th>Freq</th><th>Range</th></tr>
+    <tr><td>802.11b</td><td>Wi-Fi 1</td><td>11 Mbps</td><td>2.4 GHz</td><td>~35m indoor</td></tr>
+    <tr><td>802.11a</td><td>Wi-Fi 2</td><td>54 Mbps</td><td>5 GHz</td><td>~35m (less wall penetration)</td></tr>
+    <tr><td>802.11g</td><td>Wi-Fi 3</td><td>54 Mbps</td><td>2.4 GHz</td><td>~38m indoor</td></tr>
+    <tr><td>802.11n</td><td>Wi-Fi 4</td><td>600 Mbps</td><td>2.4/5 GHz</td><td>~70m, uses MIMO</td></tr>
+    <tr><td>802.11ac</td><td>Wi-Fi 5</td><td>3.5 Gbps</td><td>5 GHz</td><td>MU-MIMO, beamforming</td></tr>
+    <tr><td>802.11ax</td><td>Wi-Fi 6/6E</td><td>9.6 Gbps</td><td>2.4/5/6 GHz</td><td>OFDMA, better congestion</td></tr>
+  </table>
+
+  <div class="concept-box" data-label="BLUETOOTH">
+    <h3>Bluetooth (IEEE 802.15.1)</h3>
+    <p>Short-range wireless PAN (Personal Area Network) technology.</p>
+    <div class="compare-grid cols-2">
+      <div class="compare-card">
+        <h4>Key Features</h4>
+        <ul>
+          <li>Frequency: 2.4 GHz ISM band</li>
+          <li>Range: ~10m (Class 2), up to 100m (Class 1)</li>
+          <li>Uses FHSS: hops 1600 times/second across 79 channels</li>
+          <li>Piconet: 1 master + up to 7 active slaves</li>
+          <li>Scatternet: overlapping piconets</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>Versions</h4>
+        <ul>
+          <li>BT 1.x: 1 Mbps</li>
+          <li>BT 2.0 + EDR: 3 Mbps</li>
+          <li>BT 3.0: 24 Mbps (uses 802.11)</li>
+          <li>BT 4.x: BLE (Bluetooth Low Energy) — IoT</li>
+          <li>BT 5.x: 2 Mbps, 4× range, IoT focus</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="WIMAX">
+    <h3>WiMAX (IEEE 802.16)</h3>
+    <p>Worldwide Interoperability for Microwave Access. A wireless broadband standard designed for metropolitan area networks.</p>
+    <ul style="line-height:1.9;color:var(--text);margin-left:16px">
+      <li>Range: up to 50 km (line of sight) or 5-15 km (NLOS)</li>
+      <li>Speed: up to 70 Mbps (802.16e up to 30 Mbps mobile)</li>
+      <li>Frequencies: 2–11 GHz (licensed and unlicensed)</li>
+      <li>Uses OFDM for multipath resistance</li>
+      <li>Largely displaced by LTE/4G in practice</li>
+    </ul>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(13)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(15)">Next: Cellular & Satellite →</button>
+  </div>
+</div>
+
+<!-- 15: Cellular & Satellite -->
+<div class="section" id="s15">
+  <div class="section-tag">// UNIT 2 · TOPIC 06</div>
+  <div class="section-title">Cellular, Satellite & Mobile IP</div>
+  <button class="mark-btn" onclick="markDone(15)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="CELLULAR">
+    <h3>Cellular Network Architecture</h3>
+    <p>Geographic area divided into <strong style="color:var(--accent)">cells</strong>, each served by a Base Station (BS). Frequency reuse: non-adjacent cells can reuse the same frequencies.</p>
+    <div class="diagram">
+      <pre>
+         [Cell 1]   [Cell 2]
+        /   BS1  \ /  BS2  \
+       /           X        \
+[Cell6]  [Cell 7]   [Cell 3]
+       \  BS7  /\  BS3 /
+        \ MTSO/  \    /
+         [Cell5] [Cell4]
+
+MTSO = Mobile Telephone Switching Office
+     = connects cells to PSTN/internet
+     = handles handoff between cells
+      </pre>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Generation</th><th>Name</th><th>Tech</th><th>Speed</th><th>Service</th></tr>
+    <tr><td>1G (1980s)</td><td>AMPS</td><td>FDMA, Analog</td><td>~2.4 Kbps</td><td>Voice only</td></tr>
+    <tr><td>2G (1991)</td><td>GSM, CDMA</td><td>TDMA/CDMA, Digital</td><td>9.6–384 Kbps</td><td>Voice + SMS + data</td></tr>
+    <tr><td>3G (2001)</td><td>UMTS, CDMA2000</td><td>W-CDMA</td><td>384 Kbps–2 Mbps</td><td>Mobile internet</td></tr>
+    <tr><td>4G (2009)</td><td>LTE</td><td>OFDMA, MIMO</td><td>100 Mbps–1 Gbps</td><td>Broadband, VoIP</td></tr>
+    <tr><td>5G (2019)</td><td>NR</td><td>mmWave, massive MIMO</td><td>1–10+ Gbps</td><td>IoT, AR/VR, ultra-low latency</td></tr>
+  </table>
+
+  <div class="concept-box" data-label="SATELLITE">
+    <h3>Satellite Networks</h3>
+    <table>
+      <tr><th>Type</th><th>Altitude</th><th>Latency</th><th>Coverage</th><th>Use</th></tr>
+      <tr><td>GEO (Geostationary)</td><td>~36,000 km</td><td>~600ms RTT</td><td>1/3 of Earth</td><td>TV broadcast, legacy internet (HughesNet)</td></tr>
+      <tr><td>MEO (Medium Earth Orbit)</td><td>5,000–15,000 km</td><td>~100ms</td><td>Moderate</td><td>GPS, O3b</td></tr>
+      <tr><td>LEO (Low Earth Orbit)</td><td>160–2,000 km</td><td>~20-40ms</td><td>Constellation needed</td><td>Starlink, OneWeb, Iridium</td></tr>
+    </table>
+  </div>
+
+  <div class="concept-box" data-label="MOBILE IP">
+    <h3>Mobile IP</h3>
+    <p>When a device moves across networks, its IP address changes, breaking existing connections. <strong style="color:var(--accent)">Mobile IP</strong> solves this with two IP addresses:</p>
+    <div class="compare-grid cols-2">
+      <div class="compare-card">
+        <h4>Home Address (HoA)</h4>
+        <ul><li>Permanent address</li><li>What others use to reach you</li><li>Registered at Home Agent (HA)</li></ul>
+      </div>
+      <div class="compare-card">
+        <h4>Care-of Address (CoA)</h4>
+        <ul><li>Temporary address at visited network</li><li>Registered with Home Agent</li><li>HA tunnels packets to CoA</li></ul>
+      </div>
+    </div>
+    <div class="highlight">Process: Correspondent → Home Agent → (IP tunnel) → Care-of Address → Mobile Node. Triangle routing is a drawback — packets travel longer path than necessary.</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(14)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(16)">Next: Transport — ARQ →</button>
+  </div>
+</div>
+
+<!-- 16: ARQ Protocols -->
+<div class="section" id="s16">
+  <div class="section-tag">// UNIT 2 · TOPIC 07</div>
+  <div class="section-title">Transport Layer — ARQ Protocols</div>
+  <button class="mark-btn" onclick="markDone(16)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="ARQ">
+    <h3>Automatic Repeat Request (ARQ)</h3>
+    <p>ARQ protocols handle <strong style="color:var(--accent)">reliable data transfer</strong> over an unreliable channel. They use acknowledgments (ACKs) and retransmissions to ensure every packet is delivered.</p>
+    <div class="highlight key">Key metric: <strong>Efficiency (η)</strong> = throughput / maximum possible throughput. Depends on propagation delay and window size.</div>
+  </div>
+
+  <div class="concept-box" data-label="STOP AND WAIT">
+    <h3>Stop-and-Wait (Simplest)</h3>
+    <p>Send one frame. Wait for ACK. If ACK received → send next. If timeout → retransmit.</p>
+    <div class="diagram">
+      <pre>
+Sender:    [Frame 0]─────────────────▶
+                                      [ACK 0]◀───
+           [Frame 1]─────────────────▶
+                                      [ACK 1]◀───
+
+If timeout (no ACK): retransmit same frame.
+      </pre>
+    </div>
+    <div class="formula">Efficiency (η) = 1 / (1 + 2a) &nbsp;&nbsp; where a = Propagation delay / Transmission time</div>
+    <div class="highlight warn">⚠️ Very inefficient at high bandwidth-delay products. If propagation delay is large, sender is idle waiting for ACK most of the time.</div>
+  </div>
+
+  <div class="concept-box" data-label="SLIDING WINDOW">
+    <h3>Sliding Window Protocols</h3>
+    <p>Send multiple frames before waiting for ACKs. The <strong style="color:var(--accent)">window size (W)</strong> is the number of outstanding unacknowledged frames allowed.</p>
+    <div class="formula">Efficiency = W / (1 + 2a) &nbsp;if W &lt; 1+2a &nbsp;else η = 1 (full utilization)</div>
+  </div>
+
+  <div class="compare-grid cols-2">
+    <div class="compare-card">
+      <h4>Go-Back-N (GBN)</h4>
+      <ul>
+        <li>Window size: up to 2ⁿ⁻¹</li>
+        <li>Error → retransmit that frame AND all subsequent frames</li>
+        <li>Simpler receiver (no buffering)</li>
+        <li>Wastes bandwidth when errors occur</li>
+        <li>Receiver only accepts in-order frames</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>Selective Repeat (SR)</h4>
+      <ul>
+        <li>Window size: up to 2ⁿ⁻¹ (for sender AND receiver)</li>
+        <li>Error → retransmit ONLY that specific frame</li>
+        <li>Receiver buffers out-of-order frames</li>
+        <li>More efficient, more complex</li>
+        <li>Used when channel has high error rate</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <pre>
+GBN (window=4, frame 2 lost):
+Sender: [0][1][2][3][4]...   sends 4 at a time
+Error on 2:
+Receiver: accepts 0,1; discards 3,4 (out of order)
+Sender retransmits: [2][3][4][5]...  ← retransmit from 2
+
+SR (window=4, frame 2 lost):
+Receiver: accepts 0,1,buffers 3,4
+Sender retransmits: only [2]
+Receiver: delivers 2,3,4 in order
+    </pre>
+  </div>
+
+  <div class="concept-box" data-label="PIGGYBACKING">
+    <h3>Bidirectional — Piggybacking</h3>
+    <p>In full-duplex links, ACKs can be "piggybacked" on data frames going in the other direction. Instead of sending a separate ACK frame, the receiver attaches the ACK to the next data frame it sends. Reduces overhead significantly.</p>
+  </div>
+
+  <div class="quiz-box">
+    <h3>⚡ Quick Check</h3>
+    <div class="quiz-q">In Go-Back-N with a sequence number field of 4 bits, what is the maximum sender window size?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,false)">A. 16</button>
+      <button class="quiz-opt" onclick="answer(this,true)">B. 15</button>
+      <button class="quiz-opt" onclick="answer(this,false)">C. 8</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. 7</button>
+    </div>
+    <div class="quiz-feedback" id="qf16"></div>
+    <button class="quiz-next" onclick="nextSection(16)">Next Topic →</button>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(15)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(17)">Next: UDP & TCP →</button>
+  </div>
+</div>
+
+<!-- 17: UDP & TCP -->
+<div class="section" id="s17">
+  <div class="section-tag">// UNIT 2 · TOPIC 08</div>
+  <div class="section-title">UDP & TCP</div>
+  <button class="mark-btn" onclick="markDone(17)">✓ Mark as done</button>
+
+  <div class="concept-box" data-label="TRANSPORT LAYER">
+    <h3>Transport Layer Role</h3>
+    <p>The Transport Layer provides <strong style="color:var(--accent)">process-to-process delivery</strong> (not just host-to-host like IP). It uses <strong>port numbers</strong> to identify which application to deliver data to. Two main protocols: UDP and TCP.</p>
+  </div>
+
+  <div class="compare-grid cols-2">
+    <div class="compare-card">
+      <h4>UDP — User Datagram Protocol</h4>
+      <ul>
+        <li>Connectionless — no setup</li>
+        <li>Unreliable — no ACKs, no retransmit</li>
+        <li>No flow control, no congestion control</li>
+        <li>Very fast, very low overhead</li>
+        <li>8-byte header only (vs TCP's 20+ bytes)</li>
+        <li>Good for: DNS, video streaming, VoIP, gaming, DHCP</li>
+        <li>"Fire and forget"</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h4>TCP — Transmission Control Protocol</h4>
+      <ul>
+        <li>Connection-oriented (3-way handshake)</li>
+        <li>Reliable — ACKs, retransmission</li>
+        <li>Flow control (receiver window)</li>
+        <li>Congestion control (AIMD)</li>
+        <li>In-order delivery guaranteed</li>
+        <li>20-byte header minimum</li>
+        <li>Good for: HTTP, FTP, SSH, email</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="UDP HEADER">
+    <h3>UDP Header (8 bytes)</h3>
+    <div class="diagram">
+      <pre>
+0         16        32
+├──────────┬─────────┤
+│ Src Port │Dest Port│  (16 bits each)
+├──────────┴─────────┤
+│  Length  │Checksum │  (16 bits each)
+└──────────┴─────────┘
+      </pre>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="TCP HEADER">
+    <h3>TCP Header (min 20 bytes)</h3>
+    <div class="diagram">
+      <pre>
+0         16        32
+├──────────┬─────────┤
+│ Src Port │Dst Port │
+├──────────┴─────────┤
+│    Sequence Number │  (32 bits — byte number of first byte in segment)
+├────────────────────┤
+│  Acknowledgment #  │  (32 bits — next byte expected)
+├────┬──────┬────────┤
+│HLEN│Resrv │ Flags  │  URG ACK PSH RST SYN FIN
+├────┴──────┼────────┤
+│ Window    │Checksum│
+└───────────┴────────┘
+      </pre>
+    </div>
+    <div class="highlight key">
+      <strong>SYN</strong> = synchronize (connection setup) | 
+      <strong>ACK</strong> = acknowledgment | 
+      <strong>FIN</strong> = finish (connection teardown) | 
+      <strong>RST</strong> = reset (abort)
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="3-WAY HANDSHAKE">
+    <h3>TCP 3-Way Handshake</h3>
+    <div class="diagram">
+      <pre>
+Client                           Server
+  │──── SYN (seq=x) ──────────────▶│  "I want to connect, my seq starts at x"
+  │                                 │
+  │◀─── SYN+ACK (seq=y, ack=x+1) ──│  "OK! My seq=y, I expect byte x+1 from you"
+  │                                 │
+  │──── ACK (ack=y+1) ─────────────▶│  "Got it. I expect byte y+1 from you"
+  │                                 │
+  │══════════ DATA TRANSFER ════════│
+  │                                 │
+  │──── FIN ────────────────────────▶│  \
+  │◀─── ACK ──────────────────────── │   } 4-way
+  │◀─── FIN ──────────────────────── │   } teardown
+  │──── ACK ────────────────────────▶│  /
+      </pre>
+    </div>
+  </div>
+
+  <div class="concept-box" data-label="FLOW & CONGESTION">
+    <h3>Flow Control & Congestion Control</h3>
+    <div class="compare-grid cols-2">
+      <div class="compare-card">
+        <h4>Flow Control (Receiver-side)</h4>
+        <ul>
+          <li>Receiver advertises window size (rwnd)</li>
+          <li>Sender can't have more than rwnd bytes unacknowledged</li>
+          <li>Prevents overwhelming slow receiver</li>
+          <li>Window = 0? Sender pauses</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>Congestion Control (Network-side)</h4>
+        <ul>
+          <li>Slow Start: cwnd starts at 1 MSS, doubles each RTT</li>
+          <li>Congestion Avoidance: linear increase once threshold hit</li>
+          <li>On loss: threshold halved, cwnd reset</li>
+          <li>AIMD: Additive Increase, Multiplicative Decrease</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight">Effective send rate = min(rwnd, cwnd) — TCP respects BOTH flow control AND congestion control simultaneously.</div>
+
+  <div class="quiz-box">
+    <h3>⚡ Final Check</h3>
+    <div class="quiz-q">Which protocol would be most appropriate for live video streaming where occasional packet loss is acceptable but low latency is critical?</div>
+    <div class="quiz-options">
+      <button class="quiz-opt" onclick="answer(this,false)">A. TCP — because reliability is important</button>
+      <button class="quiz-opt" onclick="answer(this,true)">B. UDP — because low latency matters more than perfect delivery</button>
+      <button class="quiz-opt" onclick="answer(this,false)">C. IP — because we want direct control</button>
+      <button class="quiz-opt" onclick="answer(this,false)">D. FTP — because it's a file transfer</button>
+    </div>
+    <div class="quiz-feedback" id="qf17"></div>
+    <button class="quiz-next" onclick="alert('🎉 Congratulations! You have completed the entire Computer Networks syllabus!')">Finish Course →</button>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" onclick="goTo(16)">← Previous</button>
+    <button class="nav-btn primary" onclick="goTo(0)">↺ Back to Start</button>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+  const TOTAL = 18;
+  let done = new Set();
+  let currentSection = 0;
+
+  const sections = document.querySelectorAll('.section');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  function goTo(idx) {
+    sections[currentSection].classList.remove('active');
+    navItems[currentSection].classList.remove('active');
+    currentSection = idx;
+    sections[idx].classList.add('active');
+    navItems[idx].classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  navItems.forEach((item, i) => {
+    item.addEventListener('click', () => goTo(i));
+  });
+
+  function markDone(idx) {
+    done.add(idx);
+    navItems[idx].classList.add('done');
+    const btn = sections[idx].querySelector('.mark-btn');
+    if (btn) { btn.textContent = '✓ Done!'; btn.classList.add('marked'); btn.disabled = true; }
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = (done.size / TOTAL) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressText').textContent = `${done.size} / ${TOTAL} topics read`;
+  }
+
+  const feedback = {
+    0: { ok: "✓ Correct! A 500m area within a single campus is classic LAN territory.", bad: "✗ Remember: LAN = building/campus (~1km). 500m fits well within LAN range." },
+    1: { ok: "✓ Correct! n(n-1)/2 = 6×5/2 = 15 links.", bad: "✗ Use the formula: n(n-1)/2. For 6 nodes: 6×5÷2 = 15 links." },
+    2: { ok: "✓ Correct! Layer 3 (Network) handles IP addresses and routing between different networks.", bad: "✗ Network Layer (3) handles IP addresses. Data Link (2) handles MAC addresses." },
+    4: { ok: "✓ Correct! Nyquist: 2 × 3000 × log₂(8) = 6000 × 3 = 18,000 bps.", bad: "✗ Nyquist formula: 2 × B × log₂(L) = 2 × 3000 × log₂(8) = 6000 × 3 = 18,000 bps." },
+    7: { ok: "✓ Correct! FDM divides the cable into frequency bands — each channel gets its own band. Exactly how cable TV works.", bad: "✗ Cable TV uses FDM: each channel broadcasts on its own frequency band simultaneously." },
+    9: { ok: "✓ Correct! PSTN (Public Switched Telephone Network) uses circuit switching — a dedicated path is reserved for the duration of the call.", bad: "✗ PSTN uses circuit switching — a dedicated end-to-end path is set up before each call begins." },
+    11: { ok: "✓ Correct! Wireless nodes can't detect collisions because their own transmission drowns out the received signal. The hidden node problem makes detection unreliable.", bad: "✗ Wireless nodes can't detect their own collisions — their transmitted signal is much stronger than any received signal, masking collisions." },
+    16: { ok: "✓ Correct! GBN window size = 2ⁿ - 1 = 2⁴ - 1 = 15. (One slot reserved to distinguish full from empty window.)", bad: "✗ GBN max window = 2ⁿ - 1 where n = number of bits. With 4 bits: 2⁴ - 1 = 15." },
+    17: { ok: "✓ Correct! UDP is perfect for live streaming — a dropped frame is better than a delayed one. TCP's retransmissions would cause stuttering.", bad: "✗ UDP is the right choice. Live video can tolerate minor packet loss but can't tolerate the delays caused by TCP's retransmission." },
+  };
+
+  function answer(btn, correct) {
+    const section = btn.closest('.section');
+    const opts = section.querySelectorAll('.quiz-opt');
+    opts.forEach(o => { o.disabled = true; });
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    if (!correct) {
+      opts.forEach(o => { if (o.getAttribute('onclick').includes('true')) o.classList.add('correct'); });
+    }
+
+    const sId = parseInt(section.id.replace('s', ''));
+    const fb = section.querySelector('.quiz-feedback');
+    const nxt = section.querySelector('.quiz-next');
+    if (fb && feedback[sId]) {
+      fb.textContent = correct ? feedback[sId].ok : feedback[sId].bad;
+      fb.className = 'quiz-feedback show ' + (correct ? 'ok' : 'bad');
+    }
+    if (nxt) nxt.classList.add('show');
+  }
+
+  function nextSection(idx) {
+    markDone(idx);
+    if (idx < TOTAL - 1) goTo(idx + 1);
+  }
+</script>
+</body>
 </html>
